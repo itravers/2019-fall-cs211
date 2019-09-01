@@ -34,13 +34,7 @@ void drawScreen(int, int);		// Draws everything associated with the screen.
 /* Objects */
 MenuController menuController;
 
-
-
-
-
 /* Start of the Program. */
-
-
 int main(void) {
 	//Setup Window
 	int numRows = 0;
@@ -70,32 +64,21 @@ int main(void) {
 	MenuController::MenuController();
 
 	//Draw the screen
-	//drawScreen(numRows, numCols);
+	drawScreen(numRows, numCols);
 
 	//menu item test
-	//WINDOW* menuWindow = nullptr;
-	//PANEL* panel = new_panel(mainWindow);
-	//panel->wendx = 10;
-	//panel->wendy = 10;
-	PANEL* panel = new_panel(stdscr);
-
-	//panel.wendx = 20
-	move_panel(panel, 2, 2);
-	show_panel(panel);
-	update_panels();
-	//box(mainWindow, '|', '_');
+	WINDOW* menuWindow = nullptr;
+	menuWindow = new_panel();
+	mainWindow.new
 	
-	doupdate();
 
-	
 	refresh(); //Tells Curses to Draw
-	
 
 	//revert back to normal console mode
 	nodelay(mainWindow, TRUE);
 	keypad(mainWindow, TRUE);
 	mvaddstr(0, 0, "Press ANYKEY to continue...");
-	char pause;//
+	char pause;
 	cin >> pause;
 	endwin();
 
