@@ -40,7 +40,15 @@ public:
 	 *******************************************************************************/
 	void drawMenu(int, int);
 
+	void popupMenu(int, int);
+	void closeMenu();
+
 private:
+	/* A List of the items we will have in our menu. */
+	string menuItems[5] = { "File", "Edit", "View", "Tools", "Help" };
+
+	/* A Menu Window */
+	
 };
 
 #endif
