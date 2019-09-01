@@ -27,7 +27,6 @@ using std::cin;
 /* Function Prototypes*/
 void initColor(void);			// Initialize the Color System
 void drawBorder(int, int);		// Border around the screen
-//void drawMenu(int, int);		// Draws the "File Edit" menu
 void drawStatus(int, int);		// Draws the status bar at the bottom of the screen
 void drawScreen(int, int);		// Draws everything associated with the screen.
 
@@ -43,7 +42,6 @@ int main(void) {
 	//Initialze Curses
 	WINDOW* mainWindow = nullptr;
 	
-
 	//initialize screen to begin curses mode
 	mainWindow = initscr();
 
@@ -64,6 +62,7 @@ int main(void) {
 	//Initialize Menu Controller
 	MenuController::MenuController();
 
+	//Draw the screen
 	drawScreen(numRows, numCols);
 
 	refresh(); //Tells Curses to Draw
@@ -72,7 +71,6 @@ int main(void) {
 	nodelay(mainWindow, TRUE);
 	keypad(mainWindow, TRUE);
 	mvaddstr(0, 0, "Press ANYKEY to continue...");
-	//char result = getch();
 	char pause;
 	cin >> pause;
 	endwin();
@@ -85,7 +83,6 @@ int main(void) {
 */
 void drawScreen(int numRows, int numCols) {
 	drawBorder(numRows, numCols);
-	//drawMenu(numRows, numCols);
 	menuController.drawMenu(numRows, numCols);
 	drawStatus(numRows, numCols);
 }
@@ -100,19 +97,6 @@ void drawStatus(int numRows, int numCols) {
 	attroff(COLOR_PAIR(COLOR_MAIN_PAIR));
 }
 
-/*
-	Draws a menu to the screen
-*/
-void drawMenu(int numRows, int numCols){
-	int xoffset = 1;
-	string menuItems[5] = { "File", "Edit", "View", "Tools", "Help" };
-	//loop through and print menu items
-	attron(COLOR_PAIR(COLOR_TITLE_PAIR));
-	for (int i = 0; i <= menuItems->length(); i++) {
-		mvaddstr(0, ((numCols / MENU_ITEM_RATIO) * i) + xoffset, menuItems[i].c_str());
-	}
-	attroff(COLOR_PAIR(COLOR_TITLE_PAIR));
-}
 
 /*
 	Draws a border to the screen
