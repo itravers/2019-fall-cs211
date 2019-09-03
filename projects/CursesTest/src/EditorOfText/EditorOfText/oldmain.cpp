@@ -12,7 +12,6 @@
 
 /* Defines */
 #define PDC_DLL_BUILD 1			//Used for Curses
-#define A_ATTR (A_ATTRIBUTES)
 
 /* Includes */
 #include "curses.h"
@@ -31,17 +30,11 @@ void initColor(void);			// Initialize the Color System
 void drawBorder(int, int);		// Border around the screen
 void drawStatus(int, int);		// Draws the status bar at the bottom of the screen
 void drawScreen(int, int);		// Draws everything associated with the screen.
-static void colorbox(WINDOW*, chtype, int);
 
 /* Objects */
 MenuController menuController;
 
-static WINDOW* titleWindow;
-
-
 /* Start of the Program. */
-
-
 int main(void) {
 	//Setup Window
 	int numRows = 0;
@@ -67,45 +60,25 @@ int main(void) {
 	keypad(mainWindow, TRUE);
 	curs_set(0);
 
-	int menuHeight = 10;
-	int menuWidth = 20;
-	
-	mvwaddstr(mainWindow, 4, 2, "This is covered up text, i can't see it all.");
-
-	titleWindow = subwin(stdscr, menuHeight, menuWidth, 2, 1);
-	colorbox(titleWindow, COLOR_TITLE_PAIR, 1);
-	
-	int startx, starty, height, width;
-
-	getbegyx(titleWindow, starty, startx);
-	getmaxyx(titleWindow, height, width);
-
-	
-	mvwaddstr(titleWindow, 0, 2, "File");
-	
-
-	
-	//resize_window(titleWindow, 2, 2);
-	//wrefresh(titleWindow);
-
-
 	//Initialize Menu Controller
 	MenuController::MenuController();
 
 	//Draw the screen
 	drawScreen(numRows, numCols);
 
-
-
-	//wrefresh(titleWindow);
-	refresh(); //Tells Curses to Draw
+	//menu item test
+	WINDOW* menuWindow = nullptr;
+	menuWindow = new_panel();
+	mainWindow.new
 	
+
+	refresh(); //Tells Curses to Draw
 
 	//revert back to normal console mode
 	nodelay(mainWindow, TRUE);
 	keypad(mainWindow, TRUE);
 	mvaddstr(0, 0, "Press ANYKEY to continue...");
-	char pause;//
+	char pause;
 	cin >> pause;
 	endwin();
 
@@ -163,56 +136,4 @@ void initColor(void){
 	init_pair(COLOR_MAIN_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_TITLE_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_STATUS_PAIR, COLOR_GREEN, COLOR_BLACK);
-}
-
-/*
-	This function was not written by me. I adapted it from the setcolor 
-	function in tui.c, supplied by the teacher.
-*/
-static void setcolor(WINDOW* win, chtype color)
-{
-	chtype attr = color & A_ATTR;  /* extract Bold, Reverse, Blink bits */
-
-#ifdef A_COLOR
-	attr &= ~A_REVERSE;  /* ignore reverse, use colors instead! */
-	wattrset(win, COLOR_PAIR(color & A_CHARTEXT) | attr);
-#else
-	attr &= ~A_BOLD;     /* ignore bold, gives messy display on HP-UX */
-	wattrset(win, attr);
-#endif
-}
-
-/*
-	This function was not written by me. I adapted it from the colorbox function in tui.c
-	that the teacher supplied.
-*/
-static void colorbox(WINDOW* win, chtype color, int hasbox)
-{
-	int maxy;
-#ifndef PDCURSES
-	int maxx;
-#endif
-	chtype attr = color & A_ATTR;  /* extract Bold, Reverse, Blink bits */
-
-	setcolor(win, color);
-
-#ifdef A_COLOR
-	if (has_colors())
-		wbkgd(win, COLOR_PAIR(color & A_CHARTEXT) | (attr & ~A_REVERSE));
-	else
-#endif
-		wbkgd(win, attr);
-
-	werase(win);
-
-#ifdef PDCURSES
-	maxy = getmaxy(win);
-#else
-	getmaxyx(win, maxy, maxx);
-#endif
-	if (hasbox && (maxy > 2))
-		box(win, 0, 0);
-
-	touchwin(win);
-	wrefresh(win);
 }
