@@ -13,6 +13,7 @@
 /* Defines */
 #define PDC_DLL_BUILD 1			//Used for Curses
 #define A_ATTR (A_ATTRIBUTES)
+#define ctrl(x) ((x) & 0x1f)	//CTRL-x masking
 
 /* Includes */
 #include "curses.h"
@@ -21,10 +22,12 @@
 #include "MenuController.h"
 #include <string>
 #include <iostream>
+#include <stdio.h>
 
 /* Namespaces */
 using std::string;
 using std::cin;
+using std::cout;
 
 /* Function Prototypes*/
 void initColor(void);			// Initialize the Color System
@@ -40,8 +43,6 @@ static WINDOW* titleWindow;
 
 
 /* Start of the Program. */
-
-
 int main(void) {
 	//Setup Window
 	int numRows = 0;
@@ -67,40 +68,59 @@ int main(void) {
 	keypad(mainWindow, TRUE);
 	curs_set(0);
 
-	int menuHeight = 10;
-	int menuWidth = 20;
-	
-	mvwaddstr(mainWindow, 4, 2, "This is covered up text, i can't see it all.");
-
-	titleWindow = subwin(stdscr, menuHeight, menuWidth, 2, 1);
-	colorbox(titleWindow, COLOR_TITLE_PAIR, 1);
-	
-	int startx, starty, height, width;
-
-	getbegyx(titleWindow, starty, startx);
-	getmaxyx(titleWindow, height, width);
-
-	
-	mvwaddstr(titleWindow, 0, 2, "File");
-	
-
-	
-	//resize_window(titleWindow, 2, 2);
-	//wrefresh(titleWindow);
-
-
 	//Initialize Menu Controller
-	MenuController::MenuController();
+	MenuController::MenuController(mainWindow, numRows, numCols);
+
+	//demo text
+	mvaddstr(3 , 2, "Welcome to the Editor of Text. Where you can do wonderful things... like edit text.");
+	mvaddstr(4 , 2, "Currently, you can't edit any text, sorry. However, you can manipulate the menus!");
+	mvaddstr(6 , 2, "Menu Commands: ");
+	mvaddstr(7 , 4, "CTRL-f - Popup File Menu ");
+	mvaddstr(8 , 4, "CTRL-e - Popup Edit Menu ");
+	mvaddstr(9 , 4, "CTRL-v - Popup View Menu ");
+	mvaddstr(10, 4, "CTRL-t - Popup Tool Menu ");
+	mvaddstr(11, 4, "CTRL-h - Popup Help Menu ");
+	mvaddstr(12, 4, "CTRL-d - Close All Menus ");
+	mvaddstr(13, 4, "CTRL-c - Close The Program! ");
 
 	//Draw the screen
 	drawScreen(numRows, numCols);
+	
+	//Get Keyboard input to control the menu's
+	char c;
+	while ((c = getch()) != KEY_END) {
+		switch (c) {
+			case ctrl('f'):
+				menuController.popupMenu(MENU_FILE);
+				break;
+			case ctrl('e'):
+				menuController.popupMenu(MENU_EDIT);
+				break;
+			case ctrl('v'):
+				menuController.popupMenu(MENU_VIEW);
+				break;
+			case ctrl('t'):
+				menuController.popupMenu(MENU_TOOLS);
+				break;
+			case ctrl('h'):
+				menuController.popupMenu(MENU_HELP);
+				break;
+			case ctrl('d'):
+				menuController.closeAll();;
+				break;
+			case ctrl('c'):
+				nodelay(mainWindow, TRUE);
+				keypad(mainWindow, TRUE);
+				mvaddstr(0, 0, "Press ANYKEY to continue...");
+				endwin();
 
+				return 0;
+				break;
+		}
+	}
 
-
-	//wrefresh(titleWindow);
 	refresh(); //Tells Curses to Draw
 	
-
 	//revert back to normal console mode
 	nodelay(mainWindow, TRUE);
 	keypad(mainWindow, TRUE);
@@ -131,7 +151,6 @@ void drawStatus(int numRows, int numCols) {
 	attroff(COLOR_PAIR(COLOR_MAIN_PAIR));
 }
 
-
 /*
 	Draws a border to the screen
 */
@@ -151,7 +170,6 @@ void drawBorder(int numRows, int numCols) {
 
 		//right column border
 		mvaddch(i, numCols - 1, ACS_CKBOARD);
-
 	}
 }
 
@@ -163,56 +181,5 @@ void initColor(void){
 	init_pair(COLOR_MAIN_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_TITLE_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_STATUS_PAIR, COLOR_GREEN, COLOR_BLACK);
-}
-
-/*
-	This function was not written by me. I adapted it from the setcolor 
-	function in tui.c, supplied by the teacher.
-*/
-static void setcolor(WINDOW* win, chtype color)
-{
-	chtype attr = color & A_ATTR;  /* extract Bold, Reverse, Blink bits */
-
-#ifdef A_COLOR
-	attr &= ~A_REVERSE;  /* ignore reverse, use colors instead! */
-	wattrset(win, COLOR_PAIR(color & A_CHARTEXT) | attr);
-#else
-	attr &= ~A_BOLD;     /* ignore bold, gives messy display on HP-UX */
-	wattrset(win, attr);
-#endif
-}
-
-/*
-	This function was not written by me. I adapted it from the colorbox function in tui.c
-	that the teacher supplied.
-*/
-static void colorbox(WINDOW* win, chtype color, int hasbox)
-{
-	int maxy;
-#ifndef PDCURSES
-	int maxx;
-#endif
-	chtype attr = color & A_ATTR;  /* extract Bold, Reverse, Blink bits */
-
-	setcolor(win, color);
-
-#ifdef A_COLOR
-	if (has_colors())
-		wbkgd(win, COLOR_PAIR(color & A_CHARTEXT) | (attr & ~A_REVERSE));
-	else
-#endif
-		wbkgd(win, attr);
-
-	werase(win);
-
-#ifdef PDCURSES
-	maxy = getmaxy(win);
-#else
-	getmaxyx(win, maxy, maxx);
-#endif
-	if (hasbox && (maxy > 2))
-		box(win, 0, 0);
-
-	touchwin(win);
-	wrefresh(win);
+	init_pair(COLOR_MENU_PAIR, COLOR_GREEN, COLOR_BLACK);
 }
