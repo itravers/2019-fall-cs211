@@ -83,30 +83,40 @@ int main(void) {
 	mvaddstr(12, 4, "CTRL-d - Close All Menus ");
 	mvaddstr(13, 4, "CTRL-c - Close The Program! ");
 
+	
+
 	//Draw the screen
 	drawScreen(numRows, numCols);
+
+	menuController.setMenuState(MENU_VIEW_OPEN);
 	
 	//Get Keyboard input to control the menu's
 	char c;
 	while ((c = getch()) != KEY_END) {
 		switch (c) {
 			case ctrl('f'):
-				menuController.popupMenu(MENU_FILE);
+				//menuController.popupMenu(MENU_FILE);
+				menuController.setMenuState(MENU_FILE_OPEN);
 				break;
 			case ctrl('e'):
-				menuController.popupMenu(MENU_EDIT);
+				//menuController.popupMenu(MENU_EDIT);
+				menuController.setMenuState(MENU_EDIT_OPEN);
 				break;
 			case ctrl('v'):
-				menuController.popupMenu(MENU_VIEW);
+				//menuController.popupMenu(MENU_VIEW);
+				menuController.setMenuState(MENU_VIEW_OPEN);
 				break;
 			case ctrl('t'):
-				menuController.popupMenu(MENU_TOOLS);
+				//menuController.popupMenu(MENU_TOOLS);
+				menuController.setMenuState(MENU_TOOLS_OPEN);
 				break;
 			case ctrl('h'):
-				menuController.popupMenu(MENU_HELP);
+				//menuController.popupMenu(MENU_HELP);
+				menuController.setMenuState(MENU_HELP_OPEN);
+
 				break;
 			case ctrl('d'):
-				menuController.closeAll();;
+				menuController.setMenuState(MENU_CLOSED);
 				break;
 			case ctrl('c'):
 				nodelay(mainWindow, TRUE);

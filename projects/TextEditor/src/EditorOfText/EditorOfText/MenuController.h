@@ -32,6 +32,10 @@
 using std::string;
 using std::vector;
 
+//enum defines different states the menu can be in
+enum MENU_STATE {MENU_CLOSED, MENU_FILE_OPEN, MENU_EDIT_OPEN, MENU_VIEW_OPEN, MENU_TOOLS_OPEN, MENU_HELP_OPEN};
+
+
 /*******************************************************************************
  * Class Name:   MenuController
  * Purpose:      Controls the Text Editors Menu System
@@ -59,19 +63,19 @@ public:
 	void closeAll();
 	void colorbox(WINDOW* win, chtype color, int hasbox);
 	void setcolor(WINDOW* win, chtype color);
+	MENU_STATE getMenuState();
+	void setMenuState(MENU_STATE);
 
 private:
 	/* A List of the items we will have in our menu. */
 	string menuItems[MENU_NUM_ITEMS] = { "File", "Edit", "View", "Tools", "Help" };
 
-	//WINDOW* menuWindows[MENU_NUM_ITEMS];		/* A Menu Window */
-	//WINDOW** menuWindows;
-	//vector<WINDOW*> menuWindows;
-	
-
 	/* The menu dimensions */
 	const int menuHeight = MENU_HEIGHT;
 	const int menuWidth = MENU_WIDTH;
+
+	/* menuState keeps track of the current state of the menu. */
+	MENU_STATE menuState = MENU_CLOSED;
 };
 
 #endif

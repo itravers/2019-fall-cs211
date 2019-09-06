@@ -13,7 +13,7 @@ PANEL* menuPanels[MENU_NUM_ITEMS];			/* A Menu Panel  */
 	Default instructor doesn't need to do anything.
 */
 MenuController::MenuController() {
-
+	
 }
 
 /*
@@ -38,6 +38,8 @@ MenuController::MenuController(WINDOW* mainWindow, int numRows, int numCols) {
 		//start the menus in hidden configuration
 		hide_panel(menuPanels[i]);
 	}
+
+	
 }
 
 /*
@@ -150,4 +152,35 @@ void MenuController::setcolor(WINDOW* win, chtype color)
 	attr &= ~A_BOLD;     /* ignore bold, gives messy display on HP-UX */
 	wattrset(win, attr);
 #endif
+}
+
+/*
+	Returns the current state of the menu enum to the caller
+*/
+MENU_STATE MenuController::getMenuState(){
+	return MENU_STATE();
+}
+
+void MenuController::setMenuState(MENU_STATE state){
+	menuState = state;
+	switch (state) {
+		case MENU_CLOSED: 
+			closeAll();
+			break;
+		case MENU_FILE_OPEN:
+			popupMenu(MENU_FILE);
+			break;
+		case MENU_EDIT_OPEN:
+			popupMenu(MENU_EDIT);
+			break;
+		case MENU_VIEW_OPEN:
+			popupMenu(MENU_VIEW);
+			break;
+		case MENU_TOOLS_OPEN:
+			popupMenu(MENU_TOOLS);
+			break;
+		case MENU_HELP_OPEN:
+			popupMenu(MENU_HELP);
+			break;
+	}
 }
