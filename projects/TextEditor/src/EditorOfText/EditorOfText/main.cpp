@@ -28,6 +28,7 @@
 using std::string;
 using std::cin;
 using std::cout;
+using std::endl;
 
 /* Function Prototypes*/
 void initColor(void);			// Initialize the Color System
@@ -43,7 +44,12 @@ static WINDOW* titleWindow;
 
 
 /* Start of the Program. */
-int main(void) {
+int main(int argc, char* argv[]) {
+	//test arguments
+	for (int i = 0; i < argc; i++) {
+		cout << "Argv Output: " <<  argv[i] << endl;
+	}
+
 	//Setup Window
 	int numRows = 0;
 	int numCols = 0;
