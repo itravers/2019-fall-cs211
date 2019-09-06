@@ -10,7 +10,7 @@ WINDOW* menuWindows[MENU_NUM_ITEMS];		/* A Menu Window */
 PANEL* menuPanels[MENU_NUM_ITEMS];			/* A Menu Panel  */
 
 /*
-	Default instructor doesn't need to do anything.
+	Default constructor doesn't need to do anything.
 */
 MenuController::MenuController() {
 	

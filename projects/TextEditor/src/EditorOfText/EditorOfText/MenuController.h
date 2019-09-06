@@ -45,19 +45,19 @@ public:
 
 	/*******************************************************************************
 	 * Constructor
-	 * Parameters:
 	 *******************************************************************************/
-	
 	MenuController();
 	MenuController(WINDOW*, int, int);
 
 	/*******************************************************************************
-	 * drawMenu(int, int)
-	 * Parameters: int numCols, int numRows 
-	 * Purpose: Draws the Text Editors Menu.
+	 * Public Fields
+	 *******************************************************************************/
+
+
+	/*******************************************************************************
+	 * Public Methods
 	 *******************************************************************************/
 	void drawMenu(int, int);
-
 	void popupMenu(int);
 	void closeMenu(int);
 	void closeAll();
@@ -67,6 +67,10 @@ public:
 	void setMenuState(MENU_STATE);
 
 private:
+	/*******************************************************************************
+	 * Private Fields
+	 *******************************************************************************/
+
 	/* A List of the items we will have in our menu. */
 	string menuItems[MENU_NUM_ITEMS] = { "File", "Edit", "View", "Tools", "Help" };
 
@@ -76,6 +80,11 @@ private:
 
 	/* menuState keeps track of the current state of the menu. */
 	MENU_STATE menuState = MENU_CLOSED;
+
+
+	/*******************************************************************************
+	 * Private Methods
+	 *******************************************************************************/
 };
 
 #endif
