@@ -45,10 +45,9 @@ static WINDOW* titleWindow;
 
 /* Start of the Program. */
 int main(int argc, char* argv[]) {
-	//test arguments
-	for (int i = 0; i < argc; i++) {
-		cout << "Argv Output: " <<  argv[i] << endl;
-	}
+	string arg1;
+	arg1 = argv[1];
+	arg1 = "Command Line Argument 1  " + arg1;
 
 	//Setup Window
 	int numRows = 0;
@@ -88,6 +87,7 @@ int main(int argc, char* argv[]) {
 	mvaddstr(11, 4, "CTRL-h - Popup Help Menu ");
 	mvaddstr(12, 4, "CTRL-d - Close All Menus ");
 	mvaddstr(13, 4, "CTRL-c - Close The Program! ");
+	mvaddstr(16, 4, arg1.c_str());
 
 	
 
