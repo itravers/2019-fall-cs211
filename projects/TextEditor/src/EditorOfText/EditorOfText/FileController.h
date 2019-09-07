@@ -15,6 +15,8 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+enum READ_WRITE { READ, WRITE };
+
 /*******************************************************************************
  * Class Name:   FileController
  * Purpose:      The FileController will be responsible for all possible
@@ -36,8 +38,9 @@ public:
 	/*******************************************************************************
 	 * Public Methods
 	 *******************************************************************************/
-	bool openFile(string, vector<string>);
-	bool closeFile(string);
+	bool readFile(string fileName, vector<string>& lines, READ_WRITE readOrWrite, void(*changeStatus)(string));		/* Open A File & read into vector*/
+	bool closeFile(ifstream);					/* Closes an Input File. */
+	bool closeFile(ofstream);					/* Closes an output file. */
 
 private:
 	/*******************************************************************************
