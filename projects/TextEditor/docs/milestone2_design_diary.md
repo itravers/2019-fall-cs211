@@ -11,3 +11,9 @@ https://github.com/itravers/2019-fall-cs211/issues/16
 In visual studio, right click on the project file, not the solution file.
 Go to Debugging and under command arguments list your command arguments just as you would from the command line.
 I can't just concatanate a char* to a string, I need to figure out how to do that.
+
+I can now trigger the menus's with mouse clicks. I had to create a mouse handler function
+that calls the MenuController and has it tell us if this click involves a menu or not.
+If this click does involve a menu, we tell the MenuController to processes the click, 
+which at this point only opens or closes a menu. Closed github issue:
+https://github.com/itravers/2019-fall-cs211/issues/7
