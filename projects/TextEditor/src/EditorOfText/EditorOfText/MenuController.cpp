@@ -161,6 +161,9 @@ MENU_STATE MenuController::getMenuState(){
 	return MENU_STATE();
 }
 
+/*
+	Called publically to set the state of the menu
+*/
 void MenuController::setMenuState(MENU_STATE state){
 	menuState = state;
 	switch (state) {
@@ -182,5 +185,65 @@ void MenuController::setMenuState(MENU_STATE state){
 		case MENU_HELP_OPEN:
 			popupMenu(MENU_HELP);
 			break;
+	}
+}
+
+/*
+	Called to check if a mouse click involves the menu
+*/
+bool MenuController::isMenuMouseEvent(MEVENT* mouseEvent, int numRows, 
+									  int numCols, void(*changeStatus)(string)) {
+	//check if the mouse event is clicking on a menu item
+	//first we check and see if we have clicked in the menu bar at the top of the screen
+	int x = mouseEvent->x;
+	int y = mouseEvent->y;
+
+	//the menu is only on the top row, not counting the first or the last item
+	if (x > 0 && x < numCols - 1 && y == 0) {
+		return true;
+	}else {
+		return false;
+	}
+
+}
+
+/*
+	Called when the mouse has clicked on the menu.
+	processes the mouse click by making the menu respond accordingly
+*/
+void MenuController::processMouseEvent(MEVENT* mouseEvent, int numRows, 
+									   int numCols, void(*changeStatus)(string)) {
+	//get the event coordinates
+	int x = mouseEvent->x;
+	int y = mouseEvent->y;
+
+	//we have had a menu click, now we check if a specific item is being clicked
+	for (int i = 0; i < MENU_NUM_ITEMS; i++) {
+		string name = menuItems[i];
+		int startX = ((numCols / MENU_ITEM_RATIO) * i) + XOFFSET;
+		int endX = ((numCols / MENU_ITEM_RATIO) * i) + XOFFSET + name.length();
+		if (x >= startX && x < endX) {
+			switch (i) {
+				case 0:
+					setMenuState(MENU_FILE_OPEN);
+					break;
+				case 1:
+					setMenuState(MENU_EDIT_OPEN);
+					break;
+				case 2:
+					setMenuState(MENU_VIEW_OPEN);
+					break;
+				case 3:
+					setMenuState(MENU_TOOLS_OPEN);
+					break;
+				case 4:
+					setMenuState(MENU_HELP_OPEN);
+					break;
+			}
+			break;
+		}
+		else {
+			setMenuState(MENU_CLOSED);
+		}
 	}
 }
