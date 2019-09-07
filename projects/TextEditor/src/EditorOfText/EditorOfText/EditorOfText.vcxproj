@@ -126,6 +126,7 @@
     <ClInclude Include="curses.h" />
     <ClInclude Include="curspriv.h" />
     <ClInclude Include="customcolors.h" />
+    <ClInclude Include="FileController.h" />
     <ClInclude Include="panel.h" />
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +136,13 @@
     <Library Include="pdcurses.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FileController.cpp" />
     <ClCompile Include="MenuController.cpp" />
     <ClCompile Include="MenuController.h" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="motd.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

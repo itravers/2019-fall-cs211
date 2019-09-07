@@ -1,0 +1,11 @@
+﻿Welcome to the Editor of Text. Where you can do wonderful things... like edit text.
+Currently, you can't edit any text, sorry. However, you can manipulate the menus!
+
+Menu Commands
+	CTRL-f - Popup File Menu
+	CTRL-e - Popup Edit Menu
+	CTRL-v - Popup View Menu
+	CTRL-t - Popup Tool Menu
+	CTRL-h - Popup Help Menu
+	CTRL-d - Close All Menus
+	CTRL-c - Close the program

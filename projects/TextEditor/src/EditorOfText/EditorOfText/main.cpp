@@ -20,6 +20,7 @@
 #include "panel.h"
 #include "customcolors.h"
 #include "MenuController.h"
+#include "FileController.h"
 #include <string>
 #include <iostream>
 #include <stdio.h>
@@ -35,12 +36,18 @@ void initColor(void);			// Initialize the Color System
 void drawBorder(int, int);		// Border around the screen
 void drawStatus(int, int);		// Draws the status bar at the bottom of the screen
 void drawScreen(int, int);		// Draws everything associated with the screen.
+void changeStatus(string);		// Changes the status screen that gets printed at the bottom.
+void writeLines(vector<string>);// Writes the lines from the file to the screen
 static void colorbox(WINDOW*, chtype, int);
 
-/* Objects */
-MenuController menuController;
 
+/* Objects */
+FileController fileController;
+MenuController menuController;
 static WINDOW* titleWindow;
+
+/* Variables */
+string currentStatus = "Starting Program...";
 
 
 /* Start of the Program. */
@@ -73,28 +80,24 @@ int main(int argc, char* argv[]) {
 	keypad(mainWindow, TRUE);
 	curs_set(0);
 
+	//Initialize File Controller
+	FileController fileController;
+
 	//Initialize Menu Controller
-	MenuController::MenuController(mainWindow, numRows, numCols);
+	MenuController menuController(mainWindow, numRows, numCols);
 
-	//demo text
-	mvaddstr(3 , 2, "Welcome to the Editor of Text. Where you can do wonderful things... like edit text.");
-	mvaddstr(4 , 2, "Currently, you can't edit any text, sorry. However, you can manipulate the menus!");
-	mvaddstr(6 , 2, "Menu Commands: ");
-	mvaddstr(7 , 4, "CTRL-f - Popup File Menu ");
-	mvaddstr(8 , 4, "CTRL-e - Popup Edit Menu ");
-	mvaddstr(9 , 4, "CTRL-v - Popup View Menu ");
-	mvaddstr(10, 4, "CTRL-t - Popup Tool Menu ");
-	mvaddstr(11, 4, "CTRL-h - Popup Help Menu ");
-	mvaddstr(12, 4, "CTRL-d - Close All Menus ");
-	mvaddstr(13, 4, "CTRL-c - Close The Program! ");
-	mvaddstr(16, 4, arg1.c_str());
 
-	
+	//read in the file from the command line
+	string fileName = argv[1];
+	vector<string>lines;
+	fileController.readFile(fileName, lines, READ, changeStatus);
+	writeLines(lines);
 
 	//Draw the screen
 	drawScreen(numRows, numCols);
 
-	menuController.setMenuState(MENU_VIEW_OPEN);
+	////set menu open for demo
+	//menuController.setMenuState(MENU_VIEW_OPEN);
 	
 	//Get Keyboard input to control the menu's
 	char c;
@@ -163,7 +166,7 @@ void drawScreen(int numRows, int numCols) {
 void drawStatus(int numRows, int numCols) {
 	int xoffset = 1;
 	attron(COLOR_PAIR(COLOR_MAIN_PAIR));
-	mvaddstr(numRows-1, xoffset, "STATUS: Everything IS Okay!");
+	mvaddstr(numRows-1, xoffset, currentStatus.c_str());
 	attroff(COLOR_PAIR(COLOR_MAIN_PAIR));
 }
 
@@ -198,4 +201,20 @@ void initColor(void){
 	init_pair(COLOR_TITLE_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_STATUS_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_MENU_PAIR, COLOR_GREEN, COLOR_BLACK);
+}
+
+/*
+	Changes the current status to a new status.
+	Printed at the bottom of screen in status bar.
+*/
+void changeStatus(string newStatus) {
+	currentStatus = newStatus;
+}
+
+void writeLines(vector<string>lines) {
+	int firstLine = 2;
+	int margin = 2;
+	for (int i = 0; i < lines.size(); i++) {
+		mvaddstr(firstLine + i, 2, lines[i].c_str());
+	}
 }
