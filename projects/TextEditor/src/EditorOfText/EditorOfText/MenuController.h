@@ -31,6 +31,7 @@
 
 using std::string;
 using std::vector;
+using std::to_string;
 
 //enum defines different states the menu can be in
 enum MENU_STATE {MENU_CLOSED, MENU_FILE_OPEN, MENU_EDIT_OPEN, MENU_VIEW_OPEN, MENU_TOOLS_OPEN, MENU_HELP_OPEN};
@@ -65,6 +66,8 @@ public:
 	void setcolor(WINDOW* win, chtype color);
 	MENU_STATE getMenuState();
 	void setMenuState(MENU_STATE);
+	bool isMenuMouseEvent(MEVENT*, int numRows, int numCols, void(*changeStatus)(string));
+	void processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));
 
 private:
 	/*******************************************************************************

@@ -30,6 +30,7 @@ using std::string;
 using std::cin;
 using std::cout;
 using std::endl;
+using std::to_string;
 
 /* Function Prototypes*/
 void initColor(void);			// Initialize the Color System
@@ -38,6 +39,7 @@ void drawStatus(int, int);		// Draws the status bar at the bottom of the screen
 void drawScreen(int, int);		// Draws everything associated with the screen.
 void changeStatus(string);		// Changes the status screen that gets printed at the bottom.
 void writeLines(vector<string>);// Writes the lines from the file to the screen
+void processMouseEvent(MEVENT*, int, int);// processes a mouse event
 static void colorbox(WINDOW*, chtype, int);
 
 
@@ -140,8 +142,7 @@ int main(int argc, char* argv[]) {
 			case KEY_MOUSE:
 					//changeStatus("key mouse");
 					if (nc_getmouse(&event) == OK) {
-						string s = "key mouse: " + event.x;
-						changeStatus(s);
+						processMouseEvent(&event, numRows, numCols);
 					}
 				break;
 			default:
@@ -225,10 +226,24 @@ void changeStatus(string newStatus) {
 	currentStatus = newStatus + "                 ";
 }
 
+/*
+	Writes out the lines in vector to the screen, exactly
+	how it was read in
+*/
 void writeLines(vector<string>lines) {
 	int firstLine = 2;
 	int margin = 2;
 	for (int i = 0; i < lines.size(); i++) {
 		mvaddstr(firstLine + i, 2, lines[i].c_str());
+	}
+}
+
+/*
+	Processes a Mouse Event
+*/
+void processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
+	changeStatus("processMouseEvent()");
+	if (menuController.isMenuMouseEvent(mouseEvent, numRows, numCols, changeStatus)) {
+		menuController.processMouseEvent(mouseEvent, numRows, numCols, changeStatus);
 	}
 }
