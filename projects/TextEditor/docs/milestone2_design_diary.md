@@ -3,6 +3,8 @@ Use this space to talk about your process.  For inspiration, see [my prompts](..
 
 I need to investigate how to open a file to read and display it's contents in the text editor. Issue #9 will track
 the progress of this https://github.com/itravers/2019-fall-cs211/issues/9
+It looks like all I needed to do was read a file in line by line into a string vector
+Then I loop through the vector printing line by line to the screen.
 
 I need to investigate how to open a file from the command line, and how to debug with curses.
 https://github.com/itravers/2019-fall-cs211/issues/16
