@@ -46,6 +46,7 @@ FileController fileController;
 MenuController menuController;
 static WINDOW* titleWindow;
 
+
 /* Variables */
 string currentStatus = "Starting Program...";
 
@@ -78,6 +79,7 @@ int main(int argc, char* argv[]) {
 	noecho();
 	nodelay(mainWindow, TRUE);
 	keypad(mainWindow, TRUE);
+	//keypad(mainWindow, TRUE);
 	curs_set(0);
 
 	//Initialize File Controller
@@ -86,13 +88,15 @@ int main(int argc, char* argv[]) {
 	//Initialize Menu Controller
 	MenuController menuController(mainWindow, numRows, numCols);
 
+	//setup mouse
+	mousemask(ALL_MOUSE_EVENTS, NULL);
 
 	//read in the file from the command line
 	string fileName = argv[1];
 	vector<string>lines;
 	fileController.readFile(fileName, lines, READ, changeStatus);
 	writeLines(lines);
-
+	//changeStatus("test");
 	//Draw the screen
 	drawScreen(numRows, numCols);
 
@@ -100,29 +104,27 @@ int main(int argc, char* argv[]) {
 	//menuController.setMenuState(MENU_VIEW_OPEN);
 	
 	//Get Keyboard input to control the menu's
-	char c;
-	while ((c = getch()) != KEY_END) {
+	
+	MEVENT event;
+	int c;
+	
+	while ((c = wgetch(mainWindow)) != KEY_END) {
 		switch (c) {
+			
 			case ctrl('f'):
-				//menuController.popupMenu(MENU_FILE);
 				menuController.setMenuState(MENU_FILE_OPEN);
 				break;
 			case ctrl('e'):
-				//menuController.popupMenu(MENU_EDIT);
 				menuController.setMenuState(MENU_EDIT_OPEN);
 				break;
 			case ctrl('v'):
-				//menuController.popupMenu(MENU_VIEW);
 				menuController.setMenuState(MENU_VIEW_OPEN);
 				break;
 			case ctrl('t'):
-				//menuController.popupMenu(MENU_TOOLS);
 				menuController.setMenuState(MENU_TOOLS_OPEN);
 				break;
 			case ctrl('h'):
-				//menuController.popupMenu(MENU_HELP);
 				menuController.setMenuState(MENU_HELP_OPEN);
-
 				break;
 			case ctrl('d'):
 				menuController.setMenuState(MENU_CLOSED);
@@ -135,7 +137,19 @@ int main(int argc, char* argv[]) {
 
 				return 0;
 				break;
+			case KEY_MOUSE:
+					//changeStatus("key mouse");
+					if (nc_getmouse(&event) == OK) {
+						string s = "key mouse: " + event.x;
+						changeStatus(s);
+					}
+				break;
+			default:
+				break;
+			
 		}
+		refresh();
+		drawScreen(numRows, numCols);
 	}
 
 	refresh(); //Tells Curses to Draw
@@ -208,7 +222,7 @@ void initColor(void){
 	Printed at the bottom of screen in status bar.
 */
 void changeStatus(string newStatus) {
-	currentStatus = newStatus;
+	currentStatus = newStatus + "                 ";
 }
 
 void writeLines(vector<string>lines) {
