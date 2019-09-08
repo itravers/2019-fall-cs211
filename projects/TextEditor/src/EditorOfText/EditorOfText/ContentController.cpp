@@ -20,15 +20,38 @@ ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCol
 }
 
 /*
-	Displays the contents of a lines vector to the given window
+	Displays the contents of a lines vector to the content window
 */
 void ContentController::displayContents(vector<string> lines) {
+	/* Save Current lines*/
+	werase(contentWindow);
 	currentLines = lines;
+
 	int firstLine = 0;
 	int margin = 0;
-	for (int i = 0; i < lines.size(); i++) {
-		mvwaddstr(contentWindow, firstLine + i, margin, lines[i].c_str());
+	
+	//for (int i = 0; i < lines.size(); i++) {
+	//	mvwaddstr(contentWindow, firstLine + i, margin, lines[i].c_str());
+	//}
+	//int startLine = 0;
+	displayContentsFromLine(lines, startLine);
+	displayCursor();
+}
+
+/*
+	Displays the contents of the lines vector to the content window
+	starting at line startLine
+*/
+void ContentController::displayContentsFromLine(vector<string> lines, int startLine) {
+	//currentLines = lines;
+	werase(contentWindow);
+	int firstLine = 0, margin = 0;
+	int n = 0;
+	for (int i = startLine; i < currentLines.size(); i++) {
+		mvwaddstr(contentWindow, firstLine + n, margin, currentLines[i].c_str());
+		n++;
 	}
+	wrefresh(contentWindow);
 	displayCursor();
 }
 
@@ -78,6 +101,9 @@ void ContentController::moveCursorUp() {
 	int y = cursorLocation.y;
 	if (y <= 0) {
 		y = 0;
+		if (startLine > 0) {
+			displayContentsFromLine(currentLines, --startLine);
+		}
 	}
 	else {
 		y--;
@@ -92,14 +118,17 @@ void ContentController::moveCursorUp() {
 void ContentController::moveCursorDown(int numRows) {
 	int y = cursorLocation.y;
 	if (y >= numRows-5) {
-		//y = numRows - 5;
-		wmove(contentWindow, 5, 5);
+		//make sure we wan't scroll down past the file
+		if (startLine < currentLines.size()-1) {
+			displayContentsFromLine(currentLines, ++startLine);
+		}
 	}
 	else {
 		y++;
+		cursorLocation.y = y;
+		displayContents(currentLines);
 	}
-	cursorLocation.y = y;
-	displayContents(currentLines);
+	
 }
 
 /*
@@ -115,5 +144,3 @@ void ContentController::moveCursorLeft() {
 void ContentController::moveCursorRight() {
 
 }
-
-

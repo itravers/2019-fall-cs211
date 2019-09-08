@@ -17,3 +17,17 @@ that calls the MenuController and has it tell us if this click involves a menu o
 If this click does involve a menu, we tell the MenuController to processes the click, 
 which at this point only opens or closes a menu. Closed github issue:
 https://github.com/itravers/2019-fall-cs211/issues/7
+
+Getting the text to scroll vertically when the cursor is moved was interesting.
+First I needed to actually make a variable that tracks cursor location.
+I had to make sure my displayContents functions actually call displayCursor()
+so you can see the cursor. Then I wired up the arrow keys to move the cursor.
+If the cursor gets moved off of the bottom of the screen, it actually stays
+the same place, but the lines get printed starting at the second line instead of 
+the first. Then I needed a variable to track the startLine, so we know where
+in the lines vector to start printing. We make sure not to increase startLine so
+it is never larger than the size of the lines vector. Then I had to worry about
+startLine becoming negative, or the cursor being in a negative area, so we 
+added checks to make sure that didn't happen. Now if the cursor try's to
+go up off the top of the screen it will scroll the screen up.
+https://github.com/itravers/2019-fall-cs211/issues/17
