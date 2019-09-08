@@ -6,6 +6,7 @@
 #include "MenuController.h"
 
 //Used to keep track of menu windows and menu panels
+WINDOW* mainMenuWindow;
 WINDOW* menuWindows[MENU_NUM_ITEMS];		/* A Menu Window */
 PANEL* menuPanels[MENU_NUM_ITEMS];			/* A Menu Panel  */
 
@@ -20,6 +21,12 @@ MenuController::MenuController() {
 	Initializes all the menu windows and panels
 */
 MenuController::MenuController(WINDOW* mainWindow, int numRows, int numCols) {
+	//setup the main menu
+	mainMenuWindow = subwin(mainWindow, 0, 0, 0, 0);
+
+	//set the color box for the main menu
+	colorbox(mainMenuWindow, COLOR_MENU_PAIR, 0);
+
 	for (int i = 0; i < MENU_NUM_ITEMS; i++) {
 		
 		WINDOW* newWin = nullptr;
@@ -49,9 +56,12 @@ void MenuController::drawMenu(int numRows , int numCols) {
 		//loop through and print main menu items
 		attron(COLOR_PAIR(COLOR_MENU_PAIR));	//Set The Color For characters we are printing with.
 		for (int i = 0; i <= menuItems->length(); i++) {
-			mvaddstr(0, ((numCols / MENU_ITEM_RATIO) * i) + XOFFSET, menuItems[i].c_str());
+			mvwaddstr(mainMenuWindow, 0, ((numCols / MENU_ITEM_RATIO) * i) + XOFFSET, menuItems[i].c_str());
 		}
 		attroff(COLOR_PAIR(COLOR_MENU_PAIR)); //Unset the color
+
+		//refresh the mainMenuWindow
+		wrefresh(mainMenuWindow);
 
 		//refresh all the menuWindows
 		for (int i = 0; i < MENU_NUM_ITEMS; i++) {
