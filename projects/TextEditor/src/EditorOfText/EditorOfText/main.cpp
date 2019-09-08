@@ -21,6 +21,7 @@
 #include "customcolors.h"
 #include "MenuController.h"
 #include "FileController.h"
+#include "ContentController.h"
 #include <string>
 #include <iostream>
 #include <stdio.h>
@@ -39,13 +40,14 @@ void drawStatus(int, int);		// Draws the status bar at the bottom of the screen
 void drawScreen(int, int);		// Draws everything associated with the screen.
 void changeStatus(string);		// Changes the status screen that gets printed at the bottom.
 void writeLines(vector<string>);// Writes the lines from the file to the screen
-void processMouseEvent(MEVENT*, int, int);// processes a mouse event
+void processMainMouseEvent(MEVENT*, int, int);// processes a mouse event
 static void colorbox(WINDOW*, chtype, int);
 
 
 /* Objects */
 FileController fileController;
 MenuController menuController;
+ContentController contentController;
 static WINDOW* titleWindow;
 
 
@@ -90,6 +92,9 @@ int main(int argc, char* argv[]) {
 	//Initialize Menu Controller
 	MenuController menuController(mainWindow, numRows, numCols);
 
+	//Initialize the Content Controller
+	ContentController contentController(mainWindow, numRows, numCols);
+
 	//setup mouse
 	mousemask(ALL_MOUSE_EVENTS, NULL);
 
@@ -97,22 +102,32 @@ int main(int argc, char* argv[]) {
 	string fileName = argv[1];
 	vector<string>lines;
 	fileController.readFile(fileName, lines, READ, changeStatus);
-	writeLines(lines);
-	//changeStatus("test");
-	//Draw the screen
+	contentController.displayContents(lines);
+	//writeLines(lines);
 	drawScreen(numRows, numCols);
-
-	////set menu open for demo
-	//menuController.setMenuState(MENU_VIEW_OPEN);
-	
-	//Get Keyboard input to control the menu's
 	
 	MEVENT event;
 	int c;
 	
 	while ((c = wgetch(mainWindow)) != KEY_END) {
+		
 		switch (c) {
-			
+			case KEY_UP:
+				changeStatus("KEY_UP");
+				contentController.moveCursorUp();
+				break;
+			case KEY_DOWN:
+				changeStatus("KEY_DOWN");
+				contentController.moveCursorDown(numRows);
+				break;
+			case KEY_LEFT:
+				//changeStatus("KEY_LEFT");
+				contentController.moveCursorLeft();
+				break;
+			case KEY_RIGHT:
+				//changeStatus("KEY_RIGHT");
+				contentController.moveCursorRight();
+				break;
 			case ctrl('f'):
 				menuController.setMenuState(MENU_FILE_OPEN);
 				break;
@@ -142,7 +157,7 @@ int main(int argc, char* argv[]) {
 			case KEY_MOUSE:
 					//changeStatus("key mouse");
 					if (nc_getmouse(&event) == OK) {
-						processMouseEvent(&event, numRows, numCols);
+						processMainMouseEvent(&event, numRows, numCols);
 					}
 				break;
 			default:
@@ -180,9 +195,9 @@ void drawScreen(int numRows, int numCols) {
 */
 void drawStatus(int numRows, int numCols) {
 	int xoffset = 1;
-	attron(COLOR_PAIR(COLOR_MAIN_PAIR));
+	attron(COLOR_PAIR(COLOR_STATUS_PAIR));
 	mvaddstr(numRows-1, xoffset, currentStatus.c_str());
-	attroff(COLOR_PAIR(COLOR_MAIN_PAIR));
+	attroff(COLOR_PAIR(COLOR_STATUS_PAIR));
 }
 
 /*
@@ -214,8 +229,9 @@ void initColor(void){
 	start_color();
 	init_pair(COLOR_MAIN_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_TITLE_PAIR, COLOR_GREEN, COLOR_BLACK);
-	init_pair(COLOR_STATUS_PAIR, COLOR_GREEN, COLOR_BLACK);
+	init_pair(COLOR_STATUS_PAIR, COLOR_RED, COLOR_BLACK);
 	init_pair(COLOR_MENU_PAIR, COLOR_GREEN, COLOR_BLACK);
+	init_pair(COLOR_CURSOR_PAIR, COLOR_RED, COLOR_BLUE);
 }
 
 /*
@@ -241,9 +257,12 @@ void writeLines(vector<string>lines) {
 /*
 	Processes a Mouse Event
 */
-void processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
-	changeStatus("processMouseEvent()");
+void processMainMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
+	//changeStatus("processMouseEvent()");
 	if (menuController.isMenuMouseEvent(mouseEvent, numRows, numCols, changeStatus)) {
 		menuController.processMouseEvent(mouseEvent, numRows, numCols, changeStatus);
+	}else if (contentController.isContentMouseEvent(mouseEvent, numRows, numCols, changeStatus)) {
+		//execure the content mouse event
+		contentController.processMouseEvent(mouseEvent, numRows, numCols, changeStatus);
 	}
 }

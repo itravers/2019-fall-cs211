@@ -13,5 +13,6 @@
 #define COLOR_TITLE_PAIR 2
 #define COLOR_STATUS_PAIR 3
 #define COLOR_MENU_PAIR 4
+#define COLOR_CURSOR_PAIR 5
 
 #endif
