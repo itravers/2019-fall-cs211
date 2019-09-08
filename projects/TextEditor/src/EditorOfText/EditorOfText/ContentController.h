@@ -45,6 +45,7 @@ public:
 	  * Public Methods
 	  *******************************************************************************/
 	void displayContents(vector<string> lines);
+	void displayContentsFromLine(vector<string> lines, int startLine);
 	bool isContentMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));
 	void processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));
 	void moveCursorUp();
@@ -59,6 +60,7 @@ private:
 	WINDOW* contentWindow;
 	Location cursorLocation;
 	vector<string>currentLines;
+	int startLine = 0;
 
 	/*******************************************************************************
 	 * Private Methods
