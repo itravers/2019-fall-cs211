@@ -71,7 +71,7 @@ bool ContentController::isContentMouseEvent(MEVENT* mouseEvent, int numRows, int
 	Called for a mouse event on the window
 */
 void ContentController::processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string)) {
-	changeStatus("mouseevent");
+	//changeStatus("mouseevent");
 	//attron(A_BLINK);
 	//wmove(contentWindow, 5, 5);
 	wrefresh(contentWindow);

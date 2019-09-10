@@ -168,7 +168,7 @@ void MenuController::setcolor(WINDOW* win, chtype color)
 	Returns the current state of the menu enum to the caller
 */
 MENU_STATE MenuController::getMenuState(){
-	return MENU_STATE();
+	return menuState;
 }
 
 /*
@@ -212,6 +212,21 @@ bool MenuController::isMenuMouseEvent(MEVENT* mouseEvent, int numRows,
 	if (x > 0 && x < numCols - 1 && y == 0) {
 		return true;
 	}else {
+		//now we check and see if we clicked on any open menu windows
+		
+
+		//check the menu state, and based off of which menu is open we will check the mouse
+		MENU_STATE state = getMenuState();
+		switch (state) {
+			case MENU_CLOSED:
+				changeStatus("menuClosed");
+					return false;
+				break;
+			case MENU_FILE_OPEN:
+				changeStatus("x: " + to_string(x) + " y: " + to_string(y));
+				return true;
+				break;
+		}
 		return false;
 	}
 
@@ -228,6 +243,7 @@ void MenuController::processMouseEvent(MEVENT* mouseEvent, int numRows,
 	int y = mouseEvent->y;
 
 	//we have had a menu click, now we check if a specific item is being clicked
+	bool mainMenuClicked = false;
 	for (int i = 0; i < MENU_NUM_ITEMS; i++) {
 		string name = menuItems[i];
 		int startX = ((numCols / MENU_ITEM_RATIO) * i) + XOFFSET;
@@ -236,6 +252,7 @@ void MenuController::processMouseEvent(MEVENT* mouseEvent, int numRows,
 			switch (i) {
 				case 0:
 					setMenuState(MENU_FILE_OPEN);
+
 					break;
 				case 1:
 					setMenuState(MENU_EDIT_OPEN);
@@ -253,7 +270,9 @@ void MenuController::processMouseEvent(MEVENT* mouseEvent, int numRows,
 			break;
 		}
 		else {
-			setMenuState(MENU_CLOSED);
+			//setMenuState(MENU_CLOSED);
 		}
 	}
+
+	
 }
