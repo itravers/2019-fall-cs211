@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
 				break;
 			case KEY_DOWN:
 				changeStatus("KEY_DOWN");
-				contentController.moveCursorDown(numRows);
+				contentController.moveCursorDown();
 				break;
 			case KEY_LEFT:
 				//changeStatus("KEY_LEFT");

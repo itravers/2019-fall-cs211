@@ -1,6 +1,7 @@
 ﻿Welcome to the Editor of Text. Where you can do wonderful things... like edit text.
 Currently, you can't edit any text, sorry. However, you can manipulate the menus!
 
+
 Menu Commands
 	CTRL-f - Popup File Menu
 	CTRL-e - Popup Edit Menu
@@ -9,3 +10,36 @@ Menu Commands
 	CTRL-h - Popup Help Menu
 	CTRL-d - Close All Menus
 	CTRL-c - Close the program
+
+	Move Cursor:
+		Up Arrow	- Up
+		Down Arrow	- Down
+		Right Arrow	- Right
+		Left Arrow	- Left
+
+	This editor is going to need to be able to wrap lines that are too long to display. Thats why this line is so long that it goes off the side of the screen. It makes testing easier. This should be wrapping around the screen and not be going off the side of the screen.
+
+	This editor
+	is also going
+	to need to
+	be able to
+	scroll down
+	when text
+	goes off the
+	end of the
+	screen. We
+	Need some way
+	to take care
+	of scrolling
+	when text
+	goes too far
+	down. That's
+	why I'm 
+	typing this
+	section like
+	this. It will
+	help with testing.
+	You should be
+	able to scroll
+	down and see
+	this text. 
