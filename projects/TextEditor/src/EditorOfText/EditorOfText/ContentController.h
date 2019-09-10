@@ -49,7 +49,7 @@ public:
 	bool isContentMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));
 	void processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));
 	void moveCursorUp();
-	void moveCursorDown(int numRows);
+	void moveCursorDown();
 	void moveCursorLeft();
 	void moveCursorRight();
 
@@ -61,11 +61,15 @@ private:
 	Location cursorLocation;
 	vector<string>currentLines;
 	int startLine = 0;
+	int numCols;
+	int numRows;
 
 	/*******************************************************************************
 	 * Private Methods
 	 *******************************************************************************/
 	void displayCursor();
+	void breakLongLines(vector<string>*lines);
+	int numTabsInString(string s);
 };
 
 #endif

@@ -14,26 +14,17 @@ ContentController::ContentController() {
 }
 
 ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCols) {
+	this->numCols = numCols - 3;
+	this->numRows = numRows;
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
-	contentWindow = subwin(mainWindow, numRows - 4, numCols - 2, 2, 1);
+	contentWindow = subwin(mainWindow, numRows - 4, this->numCols, 2, 1);
 }
 
 /*
 	Displays the contents of a lines vector to the content window
 */
 void ContentController::displayContents(vector<string> lines) {
-	/* Save Current lines*/
-	werase(contentWindow);
-	currentLines = lines;
-
-	int firstLine = 0;
-	int margin = 0;
-	
-	//for (int i = 0; i < lines.size(); i++) {
-	//	mvwaddstr(contentWindow, firstLine + i, margin, lines[i].c_str());
-	//}
-	//int startLine = 0;
 	displayContentsFromLine(lines, startLine);
 	displayCursor();
 }
@@ -43,10 +34,12 @@ void ContentController::displayContents(vector<string> lines) {
 	starting at line startLine
 */
 void ContentController::displayContentsFromLine(vector<string> lines, int startLine) {
-	//currentLines = lines;
+	currentLines = lines;
 	werase(contentWindow);
 	int firstLine = 0, margin = 0;
 	int n = 0;
+	breakLongLines(&currentLines); //break longer lines up into multiple lines
+	//int numWraps = 0; //track how many times we word wrap
 	for (int i = startLine; i < currentLines.size(); i++) {
 		mvwaddstr(contentWindow, firstLine + n, margin, currentLines[i].c_str());
 		n++;
@@ -115,7 +108,7 @@ void ContentController::moveCursorUp() {
 /*
 	Moves the cursor down
 */
-void ContentController::moveCursorDown(int numRows) {
+void ContentController::moveCursorDown() {
 	int y = cursorLocation.y;
 	if (y >= numRows-5) {
 		//make sure we wan't scroll down past the file
@@ -143,4 +136,54 @@ void ContentController::moveCursorLeft() {
 */
 void ContentController::moveCursorRight() {
 
+}
+
+/*
+	Breaks long lines in the lines vector up
+	if the line is longer than numCols, the line
+	is broken up and added to itself.
+*/
+void ContentController::breakLongLines(vector<string>*lines) {
+	//scroll through until we find the first line that is too long
+	for (int i = 0; i < lines->size(); i++) {
+		string line = (*lines)[i];
+		//strings with a \t have 4 bigger size for each \t present
+		size_t numTabs = numTabsInString(line)*6;
+		//size_t lineSize = line.size() + (4 * numTabs);
+		if (line.size() > numCols) {
+			//we found a line too long.
+			int overLength = line.size() - numCols - numTabs;
+			
+			//break the line into two strings
+			string overFlowString = line.substr(numCols - numTabs, overLength);
+			string mainString = line.substr(0, numCols - numTabs);
+
+			//change current line to mainString
+			(*lines)[i] = mainString;
+
+			//insert overFlowString after currentLine we just edited
+			auto it = lines->begin() + i + 1;
+			lines->insert(it, overFlowString);
+			
+			//we only wanted to find the first one
+			break;
+		}
+		//if we haven't found any lines to long we'll return, this is the base case
+		if(i == lines->size() - 1) return;
+	}
+	//now we will find the rest of them.
+	breakLongLines(lines);
+}
+
+/*
+	Gives us the count of how many \t tabs are in a string
+*/
+
+int ContentController::numTabsInString(string s) {
+	//loop through string and count num '\t'
+	int numTabs = 0;
+	for (int i = 0; i < s.size(); i++) {
+		if (s[i] == '\t')numTabs++;
+	}
+	return numTabs;
 }
