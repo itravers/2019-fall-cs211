@@ -131,14 +131,50 @@ void ContentController::moveCursorDown() {
 	Moves the cursor left
 */
 void ContentController::moveCursorLeft() {
-
+	int x = cursorLocation.x;
+	if (x != 0) {
+		x--;
+		cursorLocation.x = x;
+	}
+	else {
+		int y = cursorLocation.y;
+		if (y != 0) {
+			y--;
+			cursorLocation.y = y;
+			x = numCols - 2;
+			cursorLocation.x = x;
+		}
+	}
+	displayContents(currentLines);
 }
 
 /*
 	Moves the cursor right
 */
 void ContentController::moveCursorRight() {
-
+	int x = cursorLocation.x;
+	if (x > numCols-3) {
+		int y = cursorLocation.y;
+		if (y > numRows - 6) {
+			//do nothing
+		}
+		else {
+			//put curser on next row at first column
+			
+			x = 0;
+			y++;
+			cursorLocation.x = x;
+			cursorLocation.y = y;
+		}
+	}
+	else {
+		
+			x++;
+			cursorLocation.x = x;
+		
+		
+	}
+	displayContents(currentLines);
 }
 
 /*
