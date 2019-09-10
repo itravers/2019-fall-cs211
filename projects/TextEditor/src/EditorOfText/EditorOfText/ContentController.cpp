@@ -14,7 +14,7 @@ ContentController::ContentController() {
 }
 
 ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCols) {
-	this->numCols = numCols - 3;
+	this->numCols = numCols - 4;
 	this->numRows = numRows;
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
@@ -36,7 +36,7 @@ void ContentController::displayContents(vector<string> lines) {
 void ContentController::displayContentsFromLine(vector<string> lines, int startLine) {
 	currentLines = lines;
 	werase(contentWindow);
-	int firstLine = 0, margin = 0;
+	int firstLine = 0, margin = 2;
 	int n = 0;
 	breakLongLines(&currentLines); //break longer lines up into multiple lines
 	//int numWraps = 0; //track how many times we word wrap
@@ -81,9 +81,12 @@ void ContentController::processMouseEvent(MEVENT* mouseEvent, int numRows, int n
 	Display the cursor on the content window
 */
 void ContentController::displayCursor() {
-	attron(COLOR_PAIR(COLOR_CURSOR_PAIR));
+	
+	wattron(contentWindow, COLOR_PAIR(COLOR_CURSOR_PAIR));
+	wattron(contentWindow, A_BLINK);
 	mvwaddstr(contentWindow, cursorLocation.y, cursorLocation.x, "C");
-	attroff(COLOR_PAIR(COLOR_CURSOR_PAIR));
+	wattroff(contentWindow, A_BLINK);
+	wattroff(contentWindow, COLOR_PAIR(COLOR_CURSOR_PAIR));
 	wrefresh(contentWindow);
 }
 
@@ -148,11 +151,11 @@ void ContentController::breakLongLines(vector<string>*lines) {
 	for (int i = 0; i < lines->size(); i++) {
 		string line = (*lines)[i];
 		//strings with a \t have 4 bigger size for each \t present
-		size_t numTabs = numTabsInString(line)*6;
+		size_t numTabs = numTabsInString(line)*4;
 		//size_t lineSize = line.size() + (4 * numTabs);
 		if (line.size() > numCols) {
-			//we found a line too long.
-			int overLength = line.size() - numCols - numTabs;
+			//we found a line too long`
+			int overLength = line.size() - numCols + numTabs;
 			
 			//break the line into two strings
 			string overFlowString = line.substr(numCols - numTabs, overLength);
