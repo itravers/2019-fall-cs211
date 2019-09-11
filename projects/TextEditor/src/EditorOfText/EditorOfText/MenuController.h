@@ -64,8 +64,8 @@ public:
 	void closeAll();
 	void colorbox(WINDOW* win, chtype color, int hasbox);
 	void setcolor(WINDOW* win, chtype color);
-	MENU_STATE getMenuState();
 	void setMenuState(MENU_STATE);
+	MENU_STATE getMenuState();
 	bool isMenuMouseEvent(MEVENT*, int numRows, int numCols, void(*changeStatus)(string));
 	void processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));
 
