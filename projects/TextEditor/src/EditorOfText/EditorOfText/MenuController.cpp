@@ -24,6 +24,15 @@ MenuController::MenuController(WINDOW* mainWindow, int numRows, int numCols) {
 	//setup the main menu
 	mainMenuWindow = subwin(mainWindow, 0, 0, 0, 0);
 
+	//setup submenu items 2d array
+	//for (int i = 0; i < rowCount; ++i)
+	//	a[i] = new int[colCount];
+	subMenuItems[0] = fileMenuItems;
+	subMenuItems[1] = editMenuItems;
+	subMenuItems[2] = viewMenuItems;
+	subMenuItems[3] = toolsMenuItems;
+	//subMenuItems[4] = helpMenuItems;
+
 	//set the color box for the main menu
 	colorbox(mainMenuWindow, COLOR_MENU_PAIR, 0);
 
@@ -42,6 +51,11 @@ MenuController::MenuController(WINDOW* mainWindow, int numRows, int numCols) {
 		//Setup the labels for each menu
 		mvwaddstr(menuWindows[i], 0, XOFFSET, menuItems[i].c_str());
 
+		//print each submenu item
+		for (int j = 0; j < SUBMENU_NUM_ITEMS; j++) {
+			mvwaddstr(menuWindows[i], j + 1, XOFFSET, subMenuItems[i][j].c_str());
+		}
+
 		//start the menus in hidden configuration
 		hide_panel(menuPanels[i]);
 	}
@@ -53,8 +67,11 @@ MenuController::MenuController(WINDOW* mainWindow, int numRows, int numCols) {
 	Draws the menu items.
 */
 void MenuController::drawMenu(int numRows , int numCols) {
+
+		//Set The Color For characters we are printing with.
+		attron(COLOR_PAIR(COLOR_MENU_PAIR));	
+
 		//loop through and print main menu items
-		attron(COLOR_PAIR(COLOR_MENU_PAIR));	//Set The Color For characters we are printing with.
 		for (int i = 0; i <= menuItems->length(); i++) {
 			mvwaddstr(mainMenuWindow, 0, ((numCols / MENU_ITEM_RATIO) * i) + XOFFSET, menuItems[i].c_str());
 		}
@@ -212,7 +229,7 @@ bool MenuController::isMenuMouseEvent(MEVENT* mouseEvent, int numRows,
 
 	//the menu is only on the top row, not counting the first or the last item
 	if (x > 0 && x < numCols - 1 && y == 0) {
-		returnVal = true;;
+		returnVal = true;
 	}else {
 
 		//now we check and see if we clicked on any open menu windows
@@ -227,7 +244,7 @@ bool MenuController::isMenuMouseEvent(MEVENT* mouseEvent, int numRows,
 
 				//file menu is between 2 <= x <= 19, 3<=y<=11later we'll remove the hard coding
 				if (x >= 2 && x <= 19 && y >= 3 && y<= 11) {
-					changeStatus(" File Menu Clicked x: " + to_string(x) + " y: " + to_string(y));
+					//changeStatus(" File Menu Clicked x: " + to_string(x) + " y: " + to_string(y));
 					returnVal = true;
 				}
 				else { // the menu file is open, but we clicked outside of it, so close it
@@ -284,7 +301,6 @@ bool MenuController::isMenuMouseEvent(MEVENT* mouseEvent, int numRows,
 				returnVal = false;
 				break;
 		}
-		returnVal = false;
 	}
 	return returnVal;
 }
@@ -325,11 +341,41 @@ void MenuController::processMouseEvent(MEVENT* mouseEvent, int numRows,
 					break;
 			}
 			break;
-		}
-		else {
-			setMenuState(MENU_CLOSED);
+		} else { // we didn't click on main menu, maybe we have clicked on a submenu
+
+			/*check each menu to see if it is open, if it IS open, check to see
+			  if we clicked inside those menu's boundries. If we did click within
+			  those menu's boundries, check and see which line we have clicked
+			  on within that menu, then run whatever function cooresponds 
+			  with that line */
+
+			//check which menu is open
+			MENU_STATE state = getMenuState();
+			switch (state) {
+				case MENU_CLOSED:
+					//the menu is closed, and we didn't click on the main menu
+					//i don't see this ever being called, but lets put it
+					//here just in case.
+					
+					//DO NOTHING
+					break;
+				case MENU_FILE_OPEN: // The File Menu Is Open
+
+					//file menu is between 2 <= x <= 19, 3<=y<=11later we'll remove the hard coding
+					if (x >= 2 && x <= 19 && y >= 3 && y <= 11) {
+						//we have clicked on the file menu, lets figure out which position we clicked on
+						int position = y - 3;
+						changeStatus("Clicked Position: " + to_string(position) + " in File Menu!");
+						switch (position) {
+							case 0:
+								changeStatus("Open File Name: ");
+								break;
+						}
+					}
+
+					break;
+			}
+
 		}
 	}
-
-	
 }
