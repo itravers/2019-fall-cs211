@@ -203,6 +203,8 @@ void MenuController::setMenuState(MENU_STATE state){
 */
 bool MenuController::isMenuMouseEvent(MEVENT* mouseEvent, int numRows, 
 									  int numCols, void(*changeStatus)(string)) {
+	bool returnVal = false;
+
 	//check if the mouse event is clicking on a menu item
 	//first we check and see if we have clicked in the menu bar at the top of the screen
 	int x = mouseEvent->x;
@@ -210,26 +212,81 @@ bool MenuController::isMenuMouseEvent(MEVENT* mouseEvent, int numRows,
 
 	//the menu is only on the top row, not counting the first or the last item
 	if (x > 0 && x < numCols - 1 && y == 0) {
-		return true;
+		returnVal = true;;
 	}else {
-		//now we check and see if we clicked on any open menu windows
-		
 
+		//now we check and see if we clicked on any open menu windows
 		//check the menu state, and based off of which menu is open we will check the mouse
 		MENU_STATE state = getMenuState();
 		switch (state) {
 			case MENU_CLOSED:
 				changeStatus("menuClosed");
-					return false;
+				returnVal = false;
 				break;
 			case MENU_FILE_OPEN:
-				changeStatus("x: " + to_string(x) + " y: " + to_string(y));
-				return true;
+
+				//file menu is between 2 <= x <= 19, 3<=y<=11later we'll remove the hard coding
+				if (x >= 2 && x <= 19 && y >= 3 && y<= 11) {
+					changeStatus(" File Menu Clicked x: " + to_string(x) + " y: " + to_string(y));
+					returnVal = true;
+				}
+				else { // the menu file is open, but we clicked outside of it, so close it
+					setMenuState(MENU_CLOSED);
+				}
+				
+				break;
+			case MENU_EDIT_OPEN:
+
+				//MENU_EDIT_OPEN menu is between 13 <= x <= 30, 3<=y<=11later we'll remove the hard coding
+				if (x >= 13 && x <= 30 && y >= 3 && y <= 11) {
+					changeStatus(" Edit Menu Clicked x: " + to_string(x) + " y: " + to_string(y));
+					returnVal = true;
+				}
+				else { // the menu file is open, but we clicked outside of it, so close it
+					setMenuState(MENU_CLOSED);
+				}
+				break;
+			case MENU_VIEW_OPEN:
+
+				//MENU_VIEW_OPEN menu is between 24 <= x <= 41, 3<=y<=11later we'll remove the hard coding
+				if (x >= 24 && x <= 41 && y >= 3 && y <= 11) {
+					changeStatus(" View Menu Clicked x: " + to_string(x) + " y: " + to_string(y));
+					returnVal = true;
+				}
+				else { // the menu file is open, but we clicked outside of it, so close it
+					setMenuState(MENU_CLOSED);
+				}
+				break;
+			case MENU_TOOLS_OPEN:
+
+				//MENU_TOOLS_OPEN menu is between 35 <= x <= 52, 3<=y<=11later we'll remove the hard coding
+				if (x >= 35 && x <= 52 && y >= 3 && y <= 11) {
+					changeStatus(" Tool Menu Clicked x: " + to_string(x) + " y: " + to_string(y));
+					returnVal = true;
+				}
+				else { // the menu file is open, but we clicked outside of it, so close it
+					setMenuState(MENU_CLOSED);
+				}
+				break;
+			case MENU_HELP_OPEN:
+				//MENU_HELP_OPEN menu is between 46 <= x <= 63, 3<=y<=11later we'll remove the hard coding
+				changeStatus(" Help Menu Clicked x: " + to_string(x) + " y: " + to_string(y));
+
+				if (x >= 46 && x <= 63 && y >= 3 && y <= 11) {
+					changeStatus(" Help Menu Clicked x: " + to_string(x) + " y: " + to_string(y));
+					returnVal = true;
+				}
+				else { // the menu file is open, but we clicked outside of it, so close it
+					setMenuState(MENU_CLOSED);
+				}
+				break;
+			default:
+				returnVal = false;
 				break;
 		}
-		return false;
+		returnVal = false;
 	}
-
+	return returnVal;
 }
 
 /*
@@ -248,7 +305,7 @@ void MenuController::processMouseEvent(MEVENT* mouseEvent, int numRows,
 		string name = menuItems[i];
 		int startX = ((numCols / MENU_ITEM_RATIO) * i) + XOFFSET;
 		int endX = ((numCols / MENU_ITEM_RATIO) * i) + XOFFSET + name.length();
-		if (x >= startX && x < endX) {
+		if (x >= startX && x < endX && getMenuState() == MENU_CLOSED) {
 			switch (i) {
 				case 0:
 					setMenuState(MENU_FILE_OPEN);
@@ -270,7 +327,7 @@ void MenuController::processMouseEvent(MEVENT* mouseEvent, int numRows,
 			break;
 		}
 		else {
-			//setMenuState(MENU_CLOSED);
+			setMenuState(MENU_CLOSED);
 		}
 	}
 
