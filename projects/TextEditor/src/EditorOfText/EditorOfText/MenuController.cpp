@@ -31,7 +31,7 @@ MenuController::MenuController(WINDOW* mainWindow, int numRows, int numCols) {
 	subMenuItems[1] = editMenuItems;
 	subMenuItems[2] = viewMenuItems;
 	subMenuItems[3] = toolsMenuItems;
-	//subMenuItems[4] = helpMenuItems;
+	subMenuItems[4] = helpMenuItems;
 
 	//set the color box for the main menu
 	colorbox(mainMenuWindow, COLOR_MENU_PAIR, 0);
