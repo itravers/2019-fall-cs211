@@ -78,11 +78,11 @@ private:
 	/* A List of the items we will have in our menu. */
 	string menuItems[MENU_NUM_ITEMS] = { "File", "Edit", "View", "Tools", "Help" };
 	string** subMenuItems = new string* [MENU_NUM_ITEMS]; //2d array to store all submenu items
-	string fileMenuItems[SUBMENU_NUM_ITEMS] = { "Open File", "Save File", " ", " ", " ", " ", " ", " "};
-	string editMenuItems[SUBMENU_NUM_ITEMS] = { " ", " ", " ", " ", " ", " ", " ", " " };
-	string viewMenuItems[SUBMENU_NUM_ITEMS] = { " ", " ", " ", " ", " ", " ", " ", " " };
-	string toolsMenuItems[SUBMENU_NUM_ITEMS] ={ " ", " ", " ", " ", " ", " ", " ", " " };
-	string helpMenuItems[SUBMENU_NUM_ITEMS] = { " ", " ", " ", " ", " ", " ", " ", " " };
+	string fileMenuItems[SUBMENU_NUM_ITEMS] = { "Open File", "Save File", " ", " ", " ", " ", " ", "Exit"};
+	string editMenuItems[SUBMENU_NUM_ITEMS] = { "Find", "Find & Replace", " ", " ", " ", " ", " ", " " };
+	string viewMenuItems[SUBMENU_NUM_ITEMS] = { "View Special Char", " ", " ", " ", " ", " ", " ", " " };
+	string toolsMenuItems[SUBMENU_NUM_ITEMS] ={ "Find", " ", " ", " ", " ", " ", " ", " " };
+	 string helpMenuItems[SUBMENU_NUM_ITEMS] ={ "About", " ", " ", " ", " ", " ", " ", " " };
 
 	/* The menu dimensions */
 	const int menuHeight = MENU_HEIGHT;
