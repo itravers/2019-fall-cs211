@@ -14,11 +14,14 @@ ContentController::ContentController() {
 }
 
 ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCols) {
-	this->numCols = numCols - 4;
+	wordWrapRecord = vector<int>();
+	this->numCols = numCols - 3;
 	this->numRows = numRows;
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
-	contentWindow = subwin(mainWindow, numRows - 4, this->numCols, 2, 1);
+	contentWindow = subwin(mainWindow, numRows - 4, this->numCols, 2, 1); //we should change these magic number
+	wrapBar = subwin(mainWindow, numRows - 4, 1, 2, numCols-2);
+	
 }
 
 /*
@@ -36,16 +39,40 @@ void ContentController::displayContents(vector<string> lines) {
 void ContentController::displayContentsFromLine(vector<string> lines, int startLine) {
 	currentLines = lines;
 	werase(contentWindow);
+	werase(wrapBar);
 	int firstLine = 0, margin = 2;
 	int n = 0;
+	
 	breakLongLines(&currentLines); //break longer lines up into multiple lines
 	//int numWraps = 0; //track how many times we word wrap
 	for (int i = startLine; i < currentLines.size(); i++) {
 		mvwaddstr(contentWindow, firstLine + n, margin, currentLines[i].c_str());
+
+		//check if this is a line that was word wrapped, print appropriate char if so
+		if (vectorContains(wordWrapRecord, i)) {
+			wattron(wrapBar, COLOR_PAIR(COLOR_CURSOR_PAIR));
+			mvwaddch(wrapBar, firstLine + n, 0, ACS_LRCORNER);
+			wattroff(wrapBar, COLOR_PAIR(COLOR_CURSOR_PAIR));
+		}
 		n++;
 	}
+
+	//REFRESH AND DISPLAY
 	wrefresh(contentWindow);
+	wrefresh(wrapBar);
 	displayCursor();
+}
+
+//check if v contains item
+//in this case the vector should be pre sorted
+bool ContentController::vectorContains(vector<int>&v, int item) {
+	bool returnVal = false;
+	if (binary_search(v.begin(), v.end(), item)) {
+		returnVal = true;
+	}else {
+		returnVal = false;
+	}
+	return returnVal;
 }
 
 
@@ -65,7 +92,6 @@ bool ContentController::isContentMouseEvent(MEVENT* mouseEvent, int numRows, int
 		return false;
 	}
 }
-
 
 /*
 	Called for a mouse event on the window
@@ -124,7 +150,6 @@ void ContentController::moveCursorDown() {
 		cursorLocation.y = y;
 		displayContents(currentLines);
 	}
-	
 }
 
 /*
@@ -156,11 +181,12 @@ void ContentController::moveCursorRight() {
 	if (x > numCols-3) {
 		int y = cursorLocation.y;
 		if (y > numRows - 6) {
+
 			//do nothing
 		}
 		else {
+
 			//put curser on next row at first column
-			
 			x = 0;
 			y++;
 			cursorLocation.x = x;
@@ -168,11 +194,8 @@ void ContentController::moveCursorRight() {
 		}
 	}
 	else {
-		
 			x++;
 			cursorLocation.x = x;
-		
-		
 	}
 	displayContents(currentLines);
 }
@@ -183,13 +206,15 @@ void ContentController::moveCursorRight() {
 	is broken up and added to itself.
 */
 void ContentController::breakLongLines(vector<string>*lines) {
+	
 	//scroll through until we find the first line that is too long
 	for (int i = 0; i < lines->size(); i++) {
 		string line = (*lines)[i];
+
 		//strings with a \t have 4 bigger size for each \t present
-		size_t numTabs = numTabsInString(line)*4;
-		//size_t lineSize = line.size() + (4 * numTabs);
+		size_t numTabs = numTabsInString(line)*8;
 		if (line.size() > numCols) {
+
 			//we found a line too long`
 			int overLength = line.size() - numCols + numTabs;
 			
@@ -203,6 +228,9 @@ void ContentController::breakLongLines(vector<string>*lines) {
 			//insert overFlowString after currentLine we just edited
 			auto it = lines->begin() + i + 1;
 			lines->insert(it, overFlowString);
+
+			//we are wrapping this line, keep a record of it so we can display later
+			wordWrapRecord.push_back(i);
 			
 			//we only wanted to find the first one
 			break;

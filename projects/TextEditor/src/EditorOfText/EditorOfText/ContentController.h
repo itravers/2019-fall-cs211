@@ -10,10 +10,12 @@
 #include "customcolors.h"
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using std::string;
 using std::vector;
 using std::to_string;
+using std::binary_search;
 
 struct Location {
 	int x;
@@ -58,8 +60,10 @@ private:
 	 * Private Fields
 	 *******************************************************************************/
 	WINDOW* contentWindow;
+	WINDOW* wrapBar; //A 1 column section at the end of each column where we can put word wrap chars
 	Location cursorLocation;
 	vector<string>currentLines;
+	vector<int> wordWrapRecord; // keeps a record of which lines have been word wrapped
 	int startLine = 0;
 	int numCols;
 	int numRows;
@@ -70,6 +74,8 @@ private:
 	void displayCursor();
 	void breakLongLines(vector<string>*lines);
 	int numTabsInString(string s);
+	bool vectorContains(vector<int>&v, int item);
+	
 };
 
 #endif

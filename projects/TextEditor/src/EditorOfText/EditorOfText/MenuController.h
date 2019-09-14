@@ -12,6 +12,7 @@
    number is the inverse. */
 #define MENU_ITEM_RATIO 10
 #define MENU_NUM_ITEMS 5	/* Number of Menu Items */
+#define SUBMENU_NUM_ITEMS 8	/* Number of Sub Menu Items */
 #define MENU_HEIGHT 10		/* Menu Height */
 #define MENU_WIDTH 20		/* Menu Width  */
 #define MENU_FILE 0
@@ -76,6 +77,12 @@ private:
 
 	/* A List of the items we will have in our menu. */
 	string menuItems[MENU_NUM_ITEMS] = { "File", "Edit", "View", "Tools", "Help" };
+	string** subMenuItems = new string* [MENU_NUM_ITEMS]; //2d array to store all submenu items
+	string fileMenuItems[SUBMENU_NUM_ITEMS] = { "Open File", "Save File", " ", " ", " ", " ", " ", "Exit"};
+	string editMenuItems[SUBMENU_NUM_ITEMS] = { "Find", "Find & Replace", " ", " ", " ", " ", " ", " " };
+	string viewMenuItems[SUBMENU_NUM_ITEMS] = { "View Special Char", " ", " ", " ", " ", " ", " ", " " };
+	string toolsMenuItems[SUBMENU_NUM_ITEMS] ={ "Find", " ", " ", " ", " ", " ", " ", " " };
+	 string helpMenuItems[SUBMENU_NUM_ITEMS] ={ "About", " ", " ", " ", " ", " ", " ", " " };
 
 	/* The menu dimensions */
 	const int menuHeight = MENU_HEIGHT;

@@ -58,8 +58,6 @@ string currentStatus = "Starting Program...";
 /* Start of the Program. */
 int main(int argc, char* argv[]) {
 	string arg1;
-	arg1 = argv[1];
-	arg1 = "Command Line Argument 1  " + arg1;
 
 	//Setup Window
 	int numRows = 0;
@@ -99,7 +97,8 @@ int main(int argc, char* argv[]) {
 	mousemask(ALL_MOUSE_EVENTS, NULL);
 
 	//read in the file from the command line
-	string fileName = argv[1];
+	string fileName = "motd.txt";
+	if (argv[1]) fileName = argv[1];
 	vector<string>lines;
 	fileController.readFile(fileName, lines, READ, changeStatus);
 	contentController.displayContents(lines);
@@ -231,7 +230,7 @@ void initColor(void){
 	init_pair(COLOR_TITLE_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_STATUS_PAIR, COLOR_RED, COLOR_BLACK);
 	init_pair(COLOR_MENU_PAIR, COLOR_GREEN, COLOR_BLACK);
-	init_pair(COLOR_CURSOR_PAIR, COLOR_RED, COLOR_BLUE);
+	init_pair(COLOR_CURSOR_PAIR, COLOR_CYAN, COLOR_BLACK);
 }
 
 /*

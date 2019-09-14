@@ -31,3 +31,12 @@ startLine becoming negative, or the cursor being in a negative area, so we
 added checks to make sure that didn't happen. Now if the cursor try's to
 go up off the top of the screen it will scroll the screen up.
 https://github.com/itravers/2019-fall-cs211/issues/17
+
+Word wrap is now working satisfactorily. We now properly word wrap. We take
+care of any instance of tabs in the text before the word wrapping. We are also
+showing a special character at the end of all the columns to let the user
+know when a line has been word wrapped. There is a special 1 column window
+now being displayed whose only purpose is to display a character to the user
+on any line a word wrap takes place. Later on we'll be able to make a setting
+that will be able to turn this window's visibility off.
+https://github.com/itravers/2019-fall-cs211/issues/22
