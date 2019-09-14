@@ -40,3 +40,6 @@ now being displayed whose only purpose is to display a character to the user
 on any line a word wrap takes place. Later on we'll be able to make a setting
 that will be able to turn this window's visibility off.
 https://github.com/itravers/2019-fall-cs211/issues/22
+
+Here is a GIF of the text editor working at this point:
+![Demo](textEditorDemo.gif)
