@@ -32,12 +32,11 @@ added checks to make sure that didn't happen. Now if the cursor try's to
 go up off the top of the screen it will scroll the screen up.
 https://github.com/itravers/2019-fall-cs211/issues/17
 
-I was able to get submenu's to properly tell if they are being clicked on or not
-if a submenu is clicked on we can now call a function relating to whatever
-function the menu is about. I hard coded the values to tell if we are clicking
-on a submenu. This would be a perfect candidate in the future for being refactored
-to take out all the "magic numbers". In this case, I decided that since I'm not
-planning on doing a great amount of updates to the menu, and since I'm not planning
-to convert the menu system to a library to be reusable that this compromise
-was acceptable for the sake of expediancy. 
-https://github.com/itravers/2019-fall-cs211/issues/20
+Word wrap is now working satisfactorily. We now properly word wrap. We take
+care of any instance of tabs in the text before the word wrapping. We are also
+showing a special character at the end of all the columns to let the user
+know when a line has been word wrapped. There is a special 1 column window
+now being displayed whose only purpose is to display a character to the user
+on any line a word wrap takes place. Later on we'll be able to make a setting
+that will be able to turn this window's visibility off.
+https://github.com/itravers/2019-fall-cs211/issues/22
