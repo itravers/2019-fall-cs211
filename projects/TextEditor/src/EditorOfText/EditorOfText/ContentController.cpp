@@ -11,17 +11,25 @@
 ContentController::ContentController() {
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
+	cursorChar = 'Q';
 }
 
 ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCols) {
+	
 	wordWrapRecord = vector<int>();
 	this->numCols = numCols - 3;
 	this->numRows = numRows;
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
+	cursorChar = 'Q';
+
+	//create the window where the file content will be
 	contentWindow = subwin(mainWindow, numRows - 4, this->numCols, 2, 1); //we should change these magic number
+	nodelay(contentWindow, TRUE);
+
+	//create a 1 column bar that will be placed after the content where we can display the wordwrap char
+	//to signify which lines have been word wrapped by the editor.
 	wrapBar = subwin(mainWindow, numRows - 4, 1, 2, numCols-2);
-	
 }
 
 /*
@@ -42,6 +50,7 @@ void ContentController::displayContentsFromLine(vector<string> lines, int startL
 	werase(wrapBar);
 	int firstLine = 0, margin = 2;
 	int n = 0;
+	replaceChar(currentLines, '\t', ' ', 4); //replace all tabs in lines with 4 spaces
 	
 	breakLongLines(&currentLines); //break longer lines up into multiple lines
 	//int numWraps = 0; //track how many times we word wrap
@@ -61,6 +70,28 @@ void ContentController::displayContentsFromLine(vector<string> lines, int startL
 	wrefresh(contentWindow);
 	wrefresh(wrapBar);
 	displayCursor();
+}
+
+//replace a given character with a certain number of others in lines.
+//we'll use this to replace special characters ourselves
+void ContentController::replaceChar(vector<string>& lines, char toReplace, char replaceWith, int numReplaces) {
+	
+	//loop through lines, finding the char toReplace
+	for (int i = 0; i < lines.size(); i++) {
+		string line = lines.at(i);
+		
+		//loop through each character
+		for (int j = 0; j < line.size(); j++) {
+
+			//check if the character is what we are looking for
+			char c = line.at(j);
+			if (c == toReplace || c < 0) {
+
+				//we want to replace this character with numReplaces number of the character replaceWith
+				lines[i][j] = replaceWith;
+			}
+		}
+	}
 }
 
 //check if v contains item
@@ -97,9 +128,6 @@ bool ContentController::isContentMouseEvent(MEVENT* mouseEvent, int numRows, int
 	Called for a mouse event on the window
 */
 void ContentController::processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string)) {
-	//changeStatus("mouseevent");
-	//attron(A_BLINK);
-	//wmove(contentWindow, 5, 5);
 	wrefresh(contentWindow);
 }
 
@@ -108,12 +136,38 @@ void ContentController::processMouseEvent(MEVENT* mouseEvent, int numRows, int n
 */
 void ContentController::displayCursor() {
 	
+	cursorChar = getChar(cursorLocation.x, cursorLocation.y);
+	if (cursorChar <= 0) cursorChar = ' ';
 	wattron(contentWindow, COLOR_PAIR(COLOR_CURSOR_PAIR));
 	wattron(contentWindow, A_BLINK);
-	mvwaddstr(contentWindow, cursorLocation.y, cursorLocation.x, "C");
+	mvwaddch(contentWindow, cursorLocation.y, cursorLocation.x, cursorChar);
 	wattroff(contentWindow, A_BLINK);
 	wattroff(contentWindow, COLOR_PAIR(COLOR_CURSOR_PAIR));
 	wrefresh(contentWindow);
+}
+
+//returns the character in current lines, given by x and y, as an integer
+int ContentController::getChar(int x, int y) {
+	int returnVal = ' ';
+	y += startLine; //adjust for the current starting line of the page
+
+	//make sure we stay within the lines
+	if (y < currentLines.size() - 1) {
+		int lineSize = currentLines[y].size();
+		x -= 2; //adjust margins with magic number
+
+		//check and make sure we aren't trying to get out of bound values from currentLines
+		if (lineSize > x) {
+			string currentLine = currentLines[y];
+
+			//only try to read this new value if it's in valid range
+			if (lineSize > x && x >= 0) {
+				char c = currentLine.at(x);
+				returnVal = (int)c;
+			}
+		}
+	}
+	return returnVal;
 }
 
 /*

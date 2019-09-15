@@ -62,6 +62,7 @@ private:
 	WINDOW* contentWindow;
 	WINDOW* wrapBar; //A 1 column section at the end of each column where we can put word wrap chars
 	Location cursorLocation;
+	int cursorChar; //the ncurses char type
 	vector<string>currentLines;
 	vector<int> wordWrapRecord; // keeps a record of which lines have been word wrapped
 	int startLine = 0;
@@ -75,6 +76,8 @@ private:
 	void breakLongLines(vector<string>*lines);
 	int numTabsInString(string s);
 	bool vectorContains(vector<int>&v, int item);
+	int getChar(int x, int y); //returns the character in the currentLines vector given by x and y
+	void replaceChar(vector<string>&lines, char toReplace, char replaceWith, int numReplaces);
 	
 };
 
