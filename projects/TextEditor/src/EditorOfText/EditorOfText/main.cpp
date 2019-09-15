@@ -81,8 +81,10 @@ int main(int argc, char* argv[]) {
 	noecho();
 	nodelay(mainWindow, TRUE);
 	keypad(mainWindow, TRUE);
+	
 	//keypad(mainWindow, TRUE);
 	curs_set(0);
+	//curs_set(2);
 
 	//Initialize File Controller
 	FileController fileController;
@@ -230,7 +232,7 @@ void initColor(void){
 	init_pair(COLOR_TITLE_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_STATUS_PAIR, COLOR_RED, COLOR_BLACK);
 	init_pair(COLOR_MENU_PAIR, COLOR_GREEN, COLOR_BLACK);
-	init_pair(COLOR_CURSOR_PAIR, COLOR_CYAN, COLOR_BLACK);
+	init_pair(COLOR_CURSOR_PAIR, COLOR_BLACK, COLOR_WHITE);
 }
 
 /*
