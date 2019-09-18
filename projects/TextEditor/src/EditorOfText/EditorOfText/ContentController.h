@@ -6,6 +6,8 @@
 #ifndef CONTENT_CONTROLLER
 #define CONTENT_CONTROLLER
 
+#define SCROLL_BAR_SIZE 2
+
 #include "curses.h"
 #include "customcolors.h"
 #include <string>
@@ -42,7 +44,7 @@ public:
 	/*******************************************************************************
 	 * Public Fields
 	 *******************************************************************************/
-	
+
 	 /*******************************************************************************
 	  * Public Methods
 	  *******************************************************************************/
@@ -54,6 +56,7 @@ public:
 	void moveCursorDown();
 	void moveCursorLeft();
 	void moveCursorRight();
+	int mapToRange(int n, int minInput, int maxInput, int minOutput, int maxOutput);
 
 private:
 	/*******************************************************************************
@@ -61,13 +64,16 @@ private:
 	 *******************************************************************************/
 	WINDOW* contentWindow;
 	WINDOW* wrapBar; //A 1 column section at the end of each column where we can put word wrap chars
+	WINDOW* scrollBar;
 	Location cursorLocation;
 	int cursorChar; //the ncurses char type
 	vector<string>currentLines;
 	vector<int> wordWrapRecord; // keeps a record of which lines have been word wrapped
-	int startLine = 0;
+
+	
 	int numCols;
 	int numRows;
+	int startLine; // this is the line that we start printing at, it changes with scrolling
 
 	/*******************************************************************************
 	 * Private Methods
@@ -78,6 +84,7 @@ private:
 	bool vectorContains(vector<int>&v, int item);
 	int getChar(int x, int y); //returns the character in the currentLines vector given by x and y
 	void replaceChar(vector<string>&lines, char toReplace, char replaceWith, int numReplaces);
+	bool isScrollbarLine(int currentLine, int currentRow, int startLine, int numLines);
 	
 };
 

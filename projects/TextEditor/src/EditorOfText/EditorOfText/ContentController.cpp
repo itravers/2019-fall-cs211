@@ -15,9 +15,9 @@ ContentController::ContentController() {
 }
 
 ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCols) {
-	
+	startLine = 0;
 	wordWrapRecord = vector<int>();
-	this->numCols = numCols - 3;
+	this->numCols = numCols - 4;
 	this->numRows = numRows;
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
@@ -29,7 +29,8 @@ ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCol
 
 	//create a 1 column bar that will be placed after the content where we can display the wordwrap char
 	//to signify which lines have been word wrapped by the editor.
-	wrapBar = subwin(mainWindow, numRows - 4, 1, 2, numCols-2);
+	wrapBar = subwin(mainWindow,   numRows - 4, 1, 2, numCols-3);
+	scrollBar = subwin(mainWindow, numRows - 4, 1, 2, numCols - 2);
 }
 
 /*
@@ -48,28 +49,54 @@ void ContentController::displayContentsFromLine(vector<string> lines, int startL
 	currentLines = lines;
 	werase(contentWindow);
 	werase(wrapBar);
+	werase(scrollBar);
 	int firstLine = 0, margin = 2;
 	int n = 0;
+
 	replaceChar(currentLines, '\t', ' ', 4); //replace all tabs in lines with 4 spaces
-	
 	breakLongLines(&currentLines); //break longer lines up into multiple lines
+
 	//int numWraps = 0; //track how many times we word wrap
 	for (int i = startLine; i < currentLines.size(); i++) {
 		mvwaddstr(contentWindow, firstLine + n, margin, currentLines[i].c_str());
 
 		//check if this is a line that was word wrapped, print appropriate char if so
 		if (vectorContains(wordWrapRecord, i)) {
-			wattron(wrapBar, COLOR_PAIR(COLOR_CURSOR_PAIR));
+			wattron(wrapBar, COLOR_PAIR(COLOR_WORDWRAP_PAIR));
 			mvwaddch(wrapBar, firstLine + n, 0, ACS_LRCORNER);
-			wattroff(wrapBar, COLOR_PAIR(COLOR_CURSOR_PAIR));
+			wattroff(wrapBar, COLOR_PAIR(COLOR_WORDWRAP_PAIR));
 		}
+
+
+		//check if this line should be a scroll bar line
+		if (isScrollbarLine(startLine + i, firstLine + n, 0, lines.size()+numRows)) {
+			wattron(scrollBar, COLOR_PAIR(COLOR_SCROLLBAR_PAIR));
+			mvwaddch(scrollBar, firstLine + n, 0, ' ');
+			wattroff(scrollBar, COLOR_PAIR(COLOR_SCROLLBAR_PAIR));
+		}
+
 		n++;
 	}
 
 	//REFRESH AND DISPLAY
 	wrefresh(contentWindow);
 	wrefresh(wrapBar);
+	wrefresh(scrollBar);
 	displayCursor();
+}
+
+/*
+	Calculates if a given line is a scoll bar line or not
+	currentLine is our currentLine in the file, currentRow, is the row we are printing out on
+*/
+bool ContentController::isScrollbarLine(int currentLine, int currentRow, int startLine, int numLines) {
+	bool returnVal = false;
+	//find the range for scroll bars
+	int scrollRow = mapToRange(currentLine, startLine, numLines+numRows-4, 0, numRows);
+	if (scrollRow == currentRow) {
+		returnVal = true;
+	}
+	return returnVal;
 }
 
 //replace a given character with a certain number of others in lines.
@@ -178,7 +205,8 @@ void ContentController::moveCursorUp() {
 	if (y <= 0) {
 		y = 0;
 		if (startLine > 0) {
-			displayContentsFromLine(currentLines, --startLine);
+			startLine -= 1;
+			displayContentsFromLine(currentLines, startLine);
 		}
 	}
 	else {
@@ -196,7 +224,8 @@ void ContentController::moveCursorDown() {
 	if (y >= numRows-5) {
 		//make sure we wan't scroll down past the file
 		if (startLine < currentLines.size()-1) {
-			displayContentsFromLine(currentLines, ++startLine);
+			startLine += 1;
+			displayContentsFromLine(currentLines, startLine);
 		}
 	}
 	else {
@@ -307,4 +336,17 @@ int ContentController::numTabsInString(string s) {
 		if (s[i] == '\t')numTabs++;
 	}
 	return numTabs;
+}
+
+
+
+/*
+	Take a number n between minInput and maxInput, and return a
+	number that is in the same proportional place between
+	minOutput and maxOutput
+*/
+int ContentController::mapToRange(int n, int minInput, int maxInput, int minOutput, int maxOutput)
+{
+	return (n - minInput) * (maxOutput - minOutput) /
+		(maxInput - minInput) + minOutput;
 }
