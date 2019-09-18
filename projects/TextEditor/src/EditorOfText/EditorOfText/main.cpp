@@ -42,6 +42,7 @@ void changeStatus(string);		// Changes the status screen that gets printed at th
 void writeLines(vector<string>);// Writes the lines from the file to the screen
 void processMainMouseEvent(MEVENT*, int, int);// processes a mouse event
 static void colorbox(WINDOW*, chtype, int);
+//int mapToRange(int n, int minInput, int maxInput, int minOutput, int maxOutput);
 
 
 /* Objects */
@@ -110,15 +111,16 @@ int main(int argc, char* argv[]) {
 	MEVENT event;
 	int c;
 	
+	//THIS IS OUR MAIN LOOP
 	while ((c = wgetch(mainWindow)) != KEY_END) {
 		
 		switch (c) {
 			case KEY_UP:
-				changeStatus("KEY_UP");
+				//changeStatus("KEY_UP");
 				contentController.moveCursorUp();
 				break;
 			case KEY_DOWN:
-				changeStatus("KEY_DOWN");
+				//changeStatus("KEY_DOWN");
 				contentController.moveCursorDown();
 				break;
 			case KEY_LEFT:
@@ -201,6 +203,8 @@ void drawStatus(int numRows, int numCols) {
 	attroff(COLOR_PAIR(COLOR_STATUS_PAIR));
 }
 
+
+
 /*
 	Draws a border to the screen
 */
@@ -233,6 +237,8 @@ void initColor(void){
 	init_pair(COLOR_STATUS_PAIR, COLOR_RED, COLOR_BLACK);
 	init_pair(COLOR_MENU_PAIR, COLOR_GREEN, COLOR_BLACK);
 	init_pair(COLOR_CURSOR_PAIR, COLOR_BLACK, COLOR_WHITE);
+	init_pair(COLOR_SCROLLBAR_PAIR, COLOR_BLACK, COLOR_GREEN);
+	init_pair(COLOR_WORDWRAP_PAIR, COLOR_GREEN, COLOR_BLACK);
 }
 
 /*
@@ -267,3 +273,5 @@ void processMainMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
 		contentController.processMouseEvent(mouseEvent, numRows, numCols, changeStatus);
 	}
 }
+
+
