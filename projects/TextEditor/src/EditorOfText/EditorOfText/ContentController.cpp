@@ -92,7 +92,7 @@ void ContentController::displayContentsFromLine(vector<string> lines, int startL
 bool ContentController::isScrollbarLine(int currentLine, int currentRow, int startLine, int numLines) {
 	bool returnVal = false;
 	//find the range for scroll bars
-	int scrollRow = mapToRange(currentLine, startLine, numLines+numRows-4, 0, numRows);
+	int scrollRow = mapToRange(currentLine, startLine, numLines+numRows-4, 0, numRows-1);
 	if (scrollRow == currentRow) {
 		returnVal = true;
 	}
