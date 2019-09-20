@@ -131,6 +131,7 @@
     <ClInclude Include="panel.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="pdcurses.dll" />
   </ItemGroup>
   <ItemGroup>

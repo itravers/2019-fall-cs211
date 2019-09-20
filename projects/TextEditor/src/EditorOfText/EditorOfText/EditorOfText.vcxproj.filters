@@ -38,6 +38,9 @@
     <None Include="pdcurses.dll">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ClassDiagram.cd">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Library Include="pdcurses.lib">

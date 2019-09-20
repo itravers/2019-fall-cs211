@@ -163,7 +163,13 @@ int main(int argc, char* argv[]) {
 						processMainMouseEvent(&event, numRows, numCols);
 					}
 				break;
+			case 'a': case 'b': case 'c':
+				changeStatus("typed: " + to_string(c));
+				contentController.insertChar(c);
+				contentController.moveCursorRight();
+				break;
 			default:
+				
 				break;
 			
 		}
@@ -273,5 +279,3 @@ void processMainMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
 		contentController.processMouseEvent(mouseEvent, numRows, numCols, changeStatus);
 	}
 }
-
-

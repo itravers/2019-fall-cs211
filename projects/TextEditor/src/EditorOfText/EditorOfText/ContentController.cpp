@@ -99,6 +99,43 @@ bool ContentController::isScrollbarLine(int currentLine, int currentRow, int sta
 	return returnVal;
 }
 
+/*
+	Inserts a character at the current index on screen
+	and at the current index in the lines vector
+*/
+void ContentController::insertChar(char c) {
+	//mvwaddch(contentWindow, cursorLocation.y, cursorLocation.x, (int)c);
+	//we only need to add the char to the lines vector, the page will auto refresh and show it
+	
+	//get the cursor location
+	int y = cursorLocation.y;
+	int x = cursorLocation.x;
+
+	//edit the character at the current cursor location
+	string line = currentLines[y];
+	//string line = "   Hello World   ";
+	
+	replaceCharInString(line, x-2, c);
+	
+	/*//check if the line we are trying to edit is long enough
+	if (x-2 <= 0) { //we are at the start of the line
+		line = c + line; // prepend
+	} else if (line.size() >= x) {
+		
+		//rebuild a new string using substrings, with the new character
+		string startString = line.substr(0, x-2);
+		string endString = line.substr(x-1);
+		string newString = startString + c + endString;
+		line = newString;
+		
+	} else {
+		line += c; //append the character
+	}*/
+	
+	currentLines[y] = line;
+	wrefresh(contentWindow);
+}
+
 //replace a given character with a certain number of others in lines.
 //we'll use this to replace special characters ourselves
 void ContentController::replaceChar(vector<string>& lines, char toReplace, char replaceWith, int numReplaces) {
@@ -117,6 +154,17 @@ void ContentController::replaceChar(vector<string>& lines, char toReplace, char 
 				//we want to replace this character with numReplaces number of the character replaceWith
 				lines[i][j] = replaceWith;
 			}
+		}
+	}
+}
+
+/*
+	Replaces a given character in a given string
+*/
+void ContentController::replaceCharInString(string& s, int n, char replaceWith) {
+	for (int i = 0; i < s.size(); i++) {
+		if (i == n) {
+			s[i] = replaceWith;
 		}
 	}
 }
