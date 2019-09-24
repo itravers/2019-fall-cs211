@@ -18,19 +18,19 @@ ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCol
 	startLine = 0;
 	wordWrapRecord = vector<int>();
 	this->numCols = numCols - 4;
-	this->numRows = numRows;
+	this->numRows = numRows - 4;
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
 	cursorChar = 'Q';
 
 	//create the window where the file content will be
-	contentWindow = subwin(mainWindow, numRows - 4, this->numCols, 2, 1); //we should change these magic number
+	contentWindow = subwin(mainWindow, this->numRows, this->numCols, 2, 1); //we should change these magic number
 	nodelay(contentWindow, TRUE);
 
 	//create a 1 column bar that will be placed after the content where we can display the wordwrap char
 	//to signify which lines have been word wrapped by the editor.
-	wrapBar = subwin(mainWindow,   numRows - 4, 1, 2, numCols-3);
-	scrollBar = subwin(mainWindow, numRows - 4, 1, 2, numCols - 2);
+	wrapBar = subwin(mainWindow, this->numRows, 1, 2, numCols-3);
+	scrollBar = subwin(mainWindow, this->numRows, 1, 2, numCols - 2);
 }
 
 /*
@@ -92,11 +92,32 @@ void ContentController::displayContentsFromLine(vector<string> lines, int startL
 bool ContentController::isScrollbarLine(int currentLine, int currentRow, int startLine, int numLines) {
 	bool returnVal = false;
 	//find the range for scroll bars
-	int scrollRow = mapToRange(currentLine, startLine, numLines+numRows-4, 0, numRows);
+	int scrollRow = mapToRange(currentLine, startLine, numLines+numRows-4, 0, numRows-1);
 	if (scrollRow == currentRow) {
 		returnVal = true;
 	}
 	return returnVal;
+}
+
+/*
+	Inserts a character at the current index on screen
+	and at the current index in the lines vector
+*/
+void ContentController::insertChar(char c) {
+	//mvwaddch(contentWindow, cursorLocation.y, cursorLocation.x, (int)c);
+	//we only need to add the char to the lines vector, the page will auto refresh and show it
+	
+	//get the cursor location
+	int y = cursorLocation.y;
+	int x = cursorLocation.x;
+
+	//edit the character at the current cursor location
+	string line = currentLines[y];
+	
+	replaceCharInString(line, x-2, c);
+	
+	currentLines[y] = line;
+	wrefresh(contentWindow);
 }
 
 //replace a given character with a certain number of others in lines.
@@ -119,6 +140,30 @@ void ContentController::replaceChar(vector<string>& lines, char toReplace, char 
 			}
 		}
 	}
+}
+
+/*
+	Replaces a given character in a given string
+*/
+void ContentController::replaceCharInString(string& s, int n, char replaceWith) {
+	
+	//we don't want to insert before the string
+	if (n < 0)return;
+
+	//if the string is not long enough, we have to add spaces, before we enter this character
+	if (s.length() <= n) {
+		 s.insert(s.length(), n - s.length(), ' ');
+		 s += replaceWith;
+		return;
+	}
+
+
+	/*for (int i = 0; i < s.size(); i++) {
+		if (i == n) {
+			s[i] = replaceWith;
+		}
+	}*/
+	s[n] = replaceWith;
 }
 
 //check if v contains item

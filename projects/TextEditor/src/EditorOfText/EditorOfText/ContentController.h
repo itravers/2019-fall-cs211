@@ -57,6 +57,7 @@ public:
 	void moveCursorLeft();
 	void moveCursorRight();
 	int mapToRange(int n, int minInput, int maxInput, int minOutput, int maxOutput);
+	void insertChar(char c); //inserts a character at the current point on screen and in lines vector
 
 private:
 	/*******************************************************************************
@@ -84,6 +85,7 @@ private:
 	bool vectorContains(vector<int>&v, int item);
 	int getChar(int x, int y); //returns the character in the currentLines vector given by x and y
 	void replaceChar(vector<string>&lines, char toReplace, char replaceWith, int numReplaces);
+	void replaceCharInString(string& s, int n, char replaceWith);
 	bool isScrollbarLine(int currentLine, int currentRow, int startLine, int numLines);
 	
 };

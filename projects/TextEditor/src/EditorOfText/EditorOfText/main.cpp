@@ -163,7 +163,16 @@ int main(int argc, char* argv[]) {
 						processMainMouseEvent(&event, numRows, numCols);
 					}
 				break;
-			default:
+			case KEY_ENTER:
+				contentController.moveCursorDown();
+				break;
+			case 'a': case 'b': case 'c': case ' ' : default:
+				changeStatus("typed: " + to_string(c));
+				contentController.insertChar(c);
+				contentController.moveCursorRight();
+				break;
+			case -1:
+				//do nothing if nothing is hit
 				break;
 			
 		}
@@ -273,5 +282,3 @@ void processMainMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
 		contentController.processMouseEvent(mouseEvent, numRows, numCols, changeStatus);
 	}
 }
-
-

@@ -20,8 +20,8 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{3A310B3C-7784-4282-BF1C-5D2474104E7A}</ProjectGuid>
-    <RootNamespace>EditorOfText</RootNamespace>
+    <ProjectGuid>{90BB1B25-3F6E-424D-9275-4B9B19C0DBFF}</ProjectGuid>
+    <RootNamespace>Lecture</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -123,29 +123,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ContentController.h" />
-    <ClInclude Include="curses.h" />
-    <ClInclude Include="curspriv.h" />
-    <ClInclude Include="customcolors.h" />
-    <ClInclude Include="FileController.h" />
-    <ClInclude Include="panel.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="pdcurses.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="pdcurses.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="ContentController.cpp" />
-    <ClCompile Include="FileController.cpp" />
-    <ClCompile Include="MenuController.cpp" />
-    <ClCompile Include="MenuController.h" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="motd.txt" />
+    <None Include="readme.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="FirstNames.txt" />
+    <Text Include="LastNames.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
