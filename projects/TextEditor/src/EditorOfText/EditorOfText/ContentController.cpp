@@ -18,19 +18,19 @@ ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCol
 	startLine = 0;
 	wordWrapRecord = vector<int>();
 	this->numCols = numCols - 4;
-	this->numRows = numRows;
+	this->numRows = numRows - 4;
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
 	cursorChar = 'Q';
 
 	//create the window where the file content will be
-	contentWindow = subwin(mainWindow, numRows - 4, this->numCols, 2, 1); //we should change these magic number
+	contentWindow = subwin(mainWindow, this->numRows, this->numCols, 2, 1); //we should change these magic number
 	nodelay(contentWindow, TRUE);
 
 	//create a 1 column bar that will be placed after the content where we can display the wordwrap char
 	//to signify which lines have been word wrapped by the editor.
-	wrapBar = subwin(mainWindow,   numRows - 4, 1, 2, numCols-3);
-	scrollBar = subwin(mainWindow, numRows - 4, 1, 2, numCols - 2);
+	wrapBar = subwin(mainWindow, this->numRows, 1, 2, numCols-3);
+	scrollBar = subwin(mainWindow, this->numRows, 1, 2, numCols - 2);
 }
 
 /*
@@ -113,24 +113,8 @@ void ContentController::insertChar(char c) {
 
 	//edit the character at the current cursor location
 	string line = currentLines[y];
-	//string line = "   Hello World   ";
 	
 	replaceCharInString(line, x-2, c);
-	
-	/*//check if the line we are trying to edit is long enough
-	if (x-2 <= 0) { //we are at the start of the line
-		line = c + line; // prepend
-	} else if (line.size() >= x) {
-		
-		//rebuild a new string using substrings, with the new character
-		string startString = line.substr(0, x-2);
-		string endString = line.substr(x-1);
-		string newString = startString + c + endString;
-		line = newString;
-		
-	} else {
-		line += c; //append the character
-	}*/
 	
 	currentLines[y] = line;
 	wrefresh(contentWindow);
@@ -162,11 +146,24 @@ void ContentController::replaceChar(vector<string>& lines, char toReplace, char 
 	Replaces a given character in a given string
 */
 void ContentController::replaceCharInString(string& s, int n, char replaceWith) {
-	for (int i = 0; i < s.size(); i++) {
+	
+	//we don't want to insert before the string
+	if (n < 0)return;
+
+	//if the string is not long enough, we have to add spaces, before we enter this character
+	if (s.length() <= n) {
+		 s.insert(s.length(), n - s.length(), ' ');
+		 s += replaceWith;
+		return;
+	}
+
+
+	/*for (int i = 0; i < s.size(); i++) {
 		if (i == n) {
 			s[i] = replaceWith;
 		}
-	}
+	}*/
+	s[n] = replaceWith;
 }
 
 //check if v contains item

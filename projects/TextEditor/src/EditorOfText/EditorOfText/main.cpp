@@ -163,13 +163,16 @@ int main(int argc, char* argv[]) {
 						processMainMouseEvent(&event, numRows, numCols);
 					}
 				break;
-			case 'a': case 'b': case 'c':
+			case KEY_ENTER:
+				contentController.moveCursorDown();
+				break;
+			case 'a': case 'b': case 'c': case ' ' : default:
 				changeStatus("typed: " + to_string(c));
 				contentController.insertChar(c);
 				contentController.moveCursorRight();
 				break;
-			default:
-				
+			case -1:
+				//do nothing if nothing is hit
 				break;
 			
 		}
