@@ -42,6 +42,7 @@ void drawScreen(int, int);		// Draws everything associated with the screen.
 void changeStatus(string);		// Changes the status screen that gets printed at the bottom.
 void writeLines(vector<string>);// Writes the lines from the file to the screen
 void processMainMouseEvent(MEVENT*, int, int);// processes a mouse event
+void initiateSaveAs();
 static void colorbox(WINDOW*, chtype, int);
 //int mapToRange(int n, int minInput, int maxInput, int minOutput, int maxOutput);
 
@@ -116,6 +117,7 @@ int main(int argc, char* argv[]) {
 	MEVENT event;
 	int c;
 	string dialogString; //used for dialog input
+	vector<string>linesToSave;
 
 	//THIS IS OUR MAIN LOOP
 	while ((c = wgetch(mainWindow)) != KEY_END) {
@@ -168,6 +170,18 @@ int main(int argc, char* argv[]) {
 				endwin();
 
 				return 0;
+				break;
+			case ctrl('s'):
+				//get filename from user
+				dialogString = dialogBox.displayDialogBox("Save File As: ");
+				dialogBox.hide();
+				contentController.displayContents(); //must be called after dialogBox.hide()
+
+				//get file data from content controller
+				
+				contentController.getCurrentLines(linesToSave);
+				fileController.writeFile(dialogString, linesToSave, changeStatus);
+				changeStatus("Saving File As: " + dialogString);
 				break;
 			case KEY_MOUSE:
 					//changeStatus("key mouse");

@@ -14,6 +14,7 @@ using std::string;
 using std::vector;
 using std::ifstream;
 using std::ofstream;
+using std::endl;
 
 enum READ_WRITE { READ, WRITE };
 
@@ -39,6 +40,7 @@ public:
 	 * Public Methods
 	 *******************************************************************************/
 	bool readFile(string fileName, vector<string>& lines, READ_WRITE readOrWrite, void(*changeStatus)(string));		/* Open A File & read into vector*/
+	bool writeFile(string fileName, vector<string>& lines, void(*changeStatus)(string));
 	bool closeFile(ifstream);					/* Closes an Input File. */
 	bool closeFile(ofstream);					/* Closes an output file. */
 

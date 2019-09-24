@@ -12,6 +12,33 @@ FileController::FileController() {
 
 }
 
+bool FileController::writeFile(string filename, vector<string>& lines, void(*changeStatus)(string)) {
+	if (outFile) outFile.close();
+
+	//try to open the file by name
+	try {
+		outFile.open(filename.c_str());
+
+		//check if the file was properly opened
+		if (!outFile) {
+			throw string("Error: Couldn't Open File " + filename + " for writing!");
+		}
+
+		//loop through the vector one by one, printing each line to file
+		for (int i = 0; i < lines.size(); i++) {
+			outFile << lines[i] << endl;
+		}
+
+		//we are done, close the outfile
+		outFile.close();
+
+	}catch (string error) {
+		//print our error to the status bar
+		changeStatus(error);
+		return false;
+	}
+}
+
 /*
 	Opens a file in the current working directory by name.
 	Reads the file into a string vector, line by line.
