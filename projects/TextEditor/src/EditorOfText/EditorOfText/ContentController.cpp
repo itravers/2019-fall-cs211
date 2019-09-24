@@ -45,6 +45,10 @@ void ContentController::displayContents(vector<string> lines) {
 	displayCursor();
 }
 
+void ContentController::getCurrentLines(vector<string>& lines) {
+	lines = currentLines;
+}
+
 /*
 	Displays the contents of the lines vector to the content window
 	starting at line startLine

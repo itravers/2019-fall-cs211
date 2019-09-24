@@ -57,6 +57,7 @@ public:
 	void moveCursorRight();
 	int mapToRange(int n, int minInput, int maxInput, int minOutput, int maxOutput);
 	void insertChar(char c); //inserts a character at the current point on screen and in lines vector
+	void getCurrentLines(vector<string>&);
 
 private:
 	/*******************************************************************************
