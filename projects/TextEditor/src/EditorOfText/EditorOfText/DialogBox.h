@@ -6,6 +6,8 @@
 #ifndef DIALOG_BOX
 #define DIALOG_BOX
 
+#define A_ATTR (A_ATTRIBUTES)
+
 #include "curses.h"
 #include "panel.h"
 #include <string>
@@ -25,6 +27,7 @@ public:
 	/*******************************************************************************
 	 * Constructor
 	 *******************************************************************************/
+	DialogBox();
 	DialogBox(WINDOW* parentWindow, string message, int yPos, int xPos, int nRows, int nCols);
 
 	/*******************************************************************************
@@ -35,26 +38,28 @@ public:
 	  * Public Methods
 	  *******************************************************************************/
 	//getters
-	string getValueFromUser(string message, int yPos, int xPos, int nRows, int nCols);
+	void displayDialogBox(string message, int yPos, int xPos, int nRows, int nCols);
 	void show();
 	void hide();
-	int getXPos();
-	int getYPos();
-	int getNumCols();
-	int getNumRows();
+	//int getXPos();
+	//int getYPos();
+	//int getNumCols();
+	//int getNumRows();
 	string getMessage();
 	bool isShowing();
-	WINDOW* getWindow();
-	PANEL getPanel();
+	//WINDOW* getWindow();
+	//PANEL getPanel();
 
 	void draw(); //draws the dialog box window if it is not hidden
 
 	//setters
-	void setXPos(int x);
-	void setYPos(int y);
-	void setNumCols(int c);
-	void setNumRows(int r);
-	void setMessage(string m);
+	//void setXPos(int x);
+	//void setYPos(int y);
+	//void setNumCols(int c);
+	//void setNumRows(int r);
+	//void setMessage(string m);
+	void setcolor(WINDOW*, chtype);
+	void colorbox(WINDOW*, chtype, int);
 
 private:
 	/*******************************************************************************
@@ -64,6 +69,7 @@ private:
 	int xPos, yPos, nCols, nRows;
 	string message;
 	WINDOW* window;
+	WINDOW* parentWindow;
 	PANEL* panel;
 	
 	int numCols; /* The Number of columns the dialog box takes. */

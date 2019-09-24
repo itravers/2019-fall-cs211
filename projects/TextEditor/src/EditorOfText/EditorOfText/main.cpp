@@ -50,7 +50,7 @@ static void colorbox(WINDOW*, chtype, int);
 FileController fileController;
 MenuController menuController;
 ContentController contentController;
-//DialogBox dialogBox;
+DialogBox dialogBox;
 static WINDOW* titleWindow;
 
 
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 	ContentController contentController(mainWindow, numRows, numCols);
 
 	//Initialize the Dialog Box
-	DialogBox dialogBox(mainWindow, "Test", 5, 5, 5, 5);
+	DialogBox dialogBox(mainWindow, "Test:", 5, 5, 3, 45);
 
 	//setup mouse
 	mousemask(ALL_MOUSE_EVENTS, NULL);
@@ -153,6 +153,10 @@ int main(int argc, char* argv[]) {
 				break;
 			case ctrl('d'):
 				menuController.setMenuState(MENU_CLOSED);
+				break;
+			case ctrl('b'):
+				
+				dialogBox.displayDialogBox("What is your name?", 10, 10, 20, 20);
 				break;
 			case ctrl('c'):
 				nodelay(mainWindow, TRUE);
