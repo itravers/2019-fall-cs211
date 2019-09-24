@@ -157,12 +157,6 @@ void ContentController::replaceCharInString(string& s, int n, char replaceWith) 
 		return;
 	}
 
-
-	/*for (int i = 0; i < s.size(); i++) {
-		if (i == n) {
-			s[i] = replaceWith;
-		}
-	}*/
 	s[n] = replaceWith;
 }
 

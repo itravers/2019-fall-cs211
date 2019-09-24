@@ -22,6 +22,7 @@
 #include "MenuController.h"
 #include "FileController.h"
 #include "ContentController.h"
+#include "DialogBox.h"
 #include <string>
 #include <iostream>
 #include <stdio.h>
@@ -49,6 +50,7 @@ static void colorbox(WINDOW*, chtype, int);
 FileController fileController;
 MenuController menuController;
 ContentController contentController;
+//DialogBox dialogBox;
 static WINDOW* titleWindow;
 
 
@@ -95,6 +97,9 @@ int main(int argc, char* argv[]) {
 
 	//Initialize the Content Controller
 	ContentController contentController(mainWindow, numRows, numCols);
+
+	//Initialize the Dialog Box
+	DialogBox dialogBox(mainWindow, "Test", 5, 5, 5, 5);
 
 	//setup mouse
 	mousemask(ALL_MOUSE_EVENTS, NULL);
@@ -199,6 +204,7 @@ int main(int argc, char* argv[]) {
 void drawScreen(int numRows, int numCols) {
 	drawBorder(numRows, numCols);
 	menuController.drawMenu(numRows, numCols);
+	dialogBox.draw();
 	drawStatus(numRows, numCols);
 }
 
