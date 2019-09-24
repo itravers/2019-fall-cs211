@@ -6,13 +6,24 @@
 #ifndef DIALOG_BOX
 #define DIALOG_BOX
 
+#define DIALOG_NUM_COLUMNS 45
+#define DIALOG_NUM_ROWS 3
+#define DIALOG_X 1
+#define DIALOG_Y 2
+
 #define A_ATTR (A_ATTRIBUTES)
 
 #include "curses.h"
 #include "panel.h"
+#include "structs.h"
 #include <string>
 
 using std::string;
+
+//struct Location {
+//	int x;
+//	int y;
+//};
 
 /*******************************************************************************
  * Class Name:   DialogBox
@@ -38,7 +49,7 @@ public:
 	  * Public Methods
 	  *******************************************************************************/
 	//getters
-	void displayDialogBox(string message, int yPos, int xPos, int nRows, int nCols);
+	string displayDialogBox(string message);
 	void show();
 	void hide();
 	//int getXPos();
@@ -77,8 +88,12 @@ private:
 	int posX;	 /* The X position of the dialog box. */
 	int posY;	/* The Y position of the dialog box. */
 
+	int cursorChar; //the ncurses char type
+	Location cursorLocation;
+
 	/*******************************************************************************
 	 * Private Methods
 	 *******************************************************************************/
+	void displayCursor();
 };
 #endif

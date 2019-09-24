@@ -22,13 +22,38 @@ DialogBox::DialogBox(WINDOW* parentWindow, string message, int yPos, int xPos, i
 	hide_panel(panel);
 }
 
-void DialogBox::displayDialogBox(string message, int yPos, int xPos, int nRows, int nCols) {
-	
+string DialogBox::displayDialogBox(string message) {
+	//delwin(window);
+	this->message = message;
+	//window = subwin(parentWindow, nRows, nCols, yPos, xPos);
+	//move_panel(panel, 50, 50);
 	//set the color box for the dialog box
 	colorbox(window, COLOR_MENU_PAIR, 1);
 	mvwaddstr(window, 1, 1, message.c_str());
 	
+	cursorLocation.x = message.size() + 1;
+	cursorLocation.y = 1;
+	displayCursor();
+	
 	wrefresh(window);
+
+	//freeze everything else going on and just get input for this dialog box
+	int c;
+	string inputValue = "";
+	while ((c = wgetch(window)) != 10/*KEY_ENTER*/) {
+		if (c == -1) continue;
+		//check if this is an alpha numeric value
+		if ((c <= 'Z' && c >= 'A') || (c <= 'z' && c >= 'a') || (c >= '0' && c <= '9') || c == '.' || c == '-' || c == '_') {
+			//it is alpha numeric, add it to the screen and to inputValue
+			mvwaddch(window, cursorLocation.y, cursorLocation.x, c);
+			cursorLocation.x++;
+			inputValue += c;
+		}
+
+		//draw();
+	}
+	hide();
+	return inputValue;
 }
 
 //draw the dialog box
@@ -55,6 +80,11 @@ bool DialogBox::isShowing() {
 void DialogBox::hide() {
 	is_showing = false;
 	hide_panel(panel);
+	//werase(window);
+	wrefresh(window);
+	update_panels();
+	doupdate();
+	//wrefresh(parentWindow);
 }
 
 //returns the message the dialog box is displaying
@@ -112,4 +142,21 @@ void DialogBox::setcolor(WINDOW* win, chtype color)
 	attr &= ~A_BOLD;     /* ignore bold, gives messy display on HP-UX */
 	wattrset(win, attr);
 #endif
+}
+
+
+/*
+	Display the cursor on the content window
+*/
+void DialogBox::displayCursor() {
+
+	//cursorChar = getChar(cursorLocation.x, cursorLocation.y);
+	cursorChar = ' ';
+	if (cursorChar <= 0) cursorChar = ' ';
+	wattron(window, COLOR_PAIR(COLOR_CURSOR_PAIR));
+	wattron(window, A_BLINK);
+	mvwaddch(window, cursorLocation.y, cursorLocation.x, cursorChar);
+	wattroff(window, A_BLINK);
+	wattroff(window, COLOR_PAIR(COLOR_CURSOR_PAIR));
+	wrefresh(window);
 }

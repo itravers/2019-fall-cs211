@@ -130,6 +130,7 @@
     <ClInclude Include="DialogBox.h" />
     <ClInclude Include="FileController.h" />
     <ClInclude Include="panel.h" />
+    <ClInclude Include="structs.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

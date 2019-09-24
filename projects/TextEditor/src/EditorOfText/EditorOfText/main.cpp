@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 	ContentController contentController(mainWindow, numRows, numCols);
 
 	//Initialize the Dialog Box
-	DialogBox dialogBox(mainWindow, "Test:", 5, 5, 3, 45);
+	DialogBox dialogBox(mainWindow, "", DIALOG_Y, DIALOG_X, DIALOG_NUM_ROWS, DIALOG_NUM_COLUMNS);
 
 	//setup mouse
 	mousemask(ALL_MOUSE_EVENTS, NULL);
@@ -115,7 +115,8 @@ int main(int argc, char* argv[]) {
 	
 	MEVENT event;
 	int c;
-	
+	string dialogString; //used for dialog input
+
 	//THIS IS OUR MAIN LOOP
 	while ((c = wgetch(mainWindow)) != KEY_END) {
 		
@@ -155,8 +156,10 @@ int main(int argc, char* argv[]) {
 				menuController.setMenuState(MENU_CLOSED);
 				break;
 			case ctrl('b'):
-				
-				dialogBox.displayDialogBox("What is your name?", 10, 10, 20, 20);
+				dialogString = dialogBox.displayDialogBox("What is your FIRST name:");
+				dialogBox.hide();
+				contentController.displayContents(); //must call this after dialogBox.hide();
+				changeStatus("My Name is: " + dialogString);
 				break;
 			case ctrl('c'):
 				nodelay(mainWindow, TRUE);
@@ -208,7 +211,7 @@ int main(int argc, char* argv[]) {
 void drawScreen(int numRows, int numCols) {
 	drawBorder(numRows, numCols);
 	menuController.drawMenu(numRows, numCols);
-	dialogBox.draw();
+	//dialogBox.draw();
 	drawStatus(numRows, numCols);
 }
 

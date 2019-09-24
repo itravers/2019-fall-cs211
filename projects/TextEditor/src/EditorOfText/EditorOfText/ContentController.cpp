@@ -33,6 +33,10 @@ ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCol
 	scrollBar = subwin(mainWindow, this->numRows, 1, 2, numCols - 2);
 }
 
+void ContentController::displayContents() {
+	displayContents(currentLines);
+}
+
 /*
 	Displays the contents of a lines vector to the content window
 */
