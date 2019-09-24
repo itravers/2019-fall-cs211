@@ -10,6 +10,7 @@ Menu Commands
 	CTRL-h - Popup Help Menu
 	CTRL-d - Close All Menus
 	CTRL-c - Close the program
+	CTRL-b - Demo Dialog Box
 
 	Move Cursor:
 		Up Arrow	- Up

@@ -10,6 +10,7 @@
 
 #include "curses.h"
 #include "customcolors.h"
+#include "structs.h"
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -19,10 +20,7 @@ using std::vector;
 using std::to_string;
 using std::binary_search;
 
-struct Location {
-	int x;
-	int y;
-};
+
 
 
 /*******************************************************************************
@@ -48,6 +46,7 @@ public:
 	 /*******************************************************************************
 	  * Public Methods
 	  *******************************************************************************/
+	void displayContents();
 	void displayContents(vector<string> lines);
 	void displayContentsFromLine(vector<string> lines, int startLine);
 	bool isContentMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));

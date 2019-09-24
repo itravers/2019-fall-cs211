@@ -22,6 +22,7 @@
 #include "MenuController.h"
 #include "FileController.h"
 #include "ContentController.h"
+#include "DialogBox.h"
 #include <string>
 #include <iostream>
 #include <stdio.h>
@@ -49,6 +50,7 @@ static void colorbox(WINDOW*, chtype, int);
 FileController fileController;
 MenuController menuController;
 ContentController contentController;
+DialogBox dialogBox;
 static WINDOW* titleWindow;
 
 
@@ -96,6 +98,9 @@ int main(int argc, char* argv[]) {
 	//Initialize the Content Controller
 	ContentController contentController(mainWindow, numRows, numCols);
 
+	//Initialize the Dialog Box
+	DialogBox dialogBox(mainWindow, "", DIALOG_Y, DIALOG_X, DIALOG_NUM_ROWS, DIALOG_NUM_COLUMNS);
+
 	//setup mouse
 	mousemask(ALL_MOUSE_EVENTS, NULL);
 
@@ -110,7 +115,8 @@ int main(int argc, char* argv[]) {
 	
 	MEVENT event;
 	int c;
-	
+	string dialogString; //used for dialog input
+
 	//THIS IS OUR MAIN LOOP
 	while ((c = wgetch(mainWindow)) != KEY_END) {
 		
@@ -148,6 +154,12 @@ int main(int argc, char* argv[]) {
 				break;
 			case ctrl('d'):
 				menuController.setMenuState(MENU_CLOSED);
+				break;
+			case ctrl('b'):
+				dialogString = dialogBox.displayDialogBox("What is your FIRST name:");
+				dialogBox.hide();
+				contentController.displayContents(); //must call this after dialogBox.hide();
+				changeStatus("My Name is: " + dialogString);
 				break;
 			case ctrl('c'):
 				nodelay(mainWindow, TRUE);
@@ -199,6 +211,7 @@ int main(int argc, char* argv[]) {
 void drawScreen(int numRows, int numCols) {
 	drawBorder(numRows, numCols);
 	menuController.drawMenu(numRows, numCols);
+	//dialogBox.draw();
 	drawStatus(numRows, numCols);
 }
 
