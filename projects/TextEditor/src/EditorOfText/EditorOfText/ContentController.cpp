@@ -122,10 +122,19 @@ void ContentController::insertChar(char c) {
 	//calculate which line we are inserting in, when we adjust for current scrolling position
 	int yAdjusted = y + startLine;
 
+	//if we are trying to add a character to a line that doesn't exist, we need to add blank lines
+	if (currentLines.size() <= yAdjusted) {
+		while (currentLines.size() <= yAdjusted) {
+			currentLines.push_back("");
+		}
+	}
+
 	//edit the character at the current cursor location (+ startLine adjusts the correct line when scrolling)
 	string line = currentLines[ yAdjusted];
 	
 	replaceCharInString(line, x-2, c);
+
+	
 	
 	currentLines[yAdjusted] = line;
 	wrefresh(contentWindow);
