@@ -119,12 +119,15 @@ void ContentController::insertChar(char c) {
 	int y = cursorLocation.y;
 	int x = cursorLocation.x;
 
-	//edit the character at the current cursor location
-	string line = currentLines[y];
+	//calculate which line we are inserting in, when we adjust for current scrolling position
+	int yAdjusted = y + startLine;
+
+	//edit the character at the current cursor location (+ startLine adjusts the correct line when scrolling)
+	string line = currentLines[ yAdjusted];
 	
 	replaceCharInString(line, x-2, c);
 	
-	currentLines[y] = line;
+	currentLines[yAdjusted] = line;
 	wrefresh(contentWindow);
 }
 
