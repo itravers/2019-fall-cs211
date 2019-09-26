@@ -8,6 +8,10 @@
 /*
 	Default Constructor
 */
+FileController::FileController() {
+
+}
+
 FileController::FileController(TextEditor* t) {
 	textEditor = t;
 }

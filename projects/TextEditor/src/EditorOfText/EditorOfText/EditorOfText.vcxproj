@@ -146,7 +146,6 @@
     <ClCompile Include="FileController.cpp" />
     <ClCompile Include="MenuController.cpp" />
     <ClCompile Include="MenuController.h" />
-    <ClCompile Include="old_main.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TextEditor.cpp" />
   </ItemGroup>

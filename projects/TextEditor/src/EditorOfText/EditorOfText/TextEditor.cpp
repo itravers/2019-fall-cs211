@@ -6,6 +6,11 @@
 
 #include "TextEditor.h"
 
+//TextEditor::TextEditor() : fileController(this), menuController(this), contentController(this) {
+TextEditor::TextEditor() {
+
+}
+
 void TextEditor::load(string fileName) {
 	string arg1;
 
@@ -253,12 +258,12 @@ void TextEditor::writeLines(vector<string>lines) {
 */
 void TextEditor::processMainMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
 	//changeStatus("processMouseEvent()");
-	if (menuController.isMenuMouseEvent(mouseEvent, numRows, numCols, changeStatus)) {
-		menuController.processMouseEvent(mouseEvent, numRows, numCols, changeStatus);
+	if (menuController.isMenuMouseEvent(mouseEvent, numRows, numCols)) {
+		menuController.processMouseEvent(mouseEvent, numRows, numCols);
 	}
-	else if (contentController.isContentMouseEvent(mouseEvent, numRows, numCols, changeStatus)) {
+	else if (contentController->isContentMouseEvent(mouseEvent, numRows, numCols)) {
 		//execure the content mouse event
-		contentController.processMouseEvent(mouseEvent, numRows, numCols, changeStatus);
+		contentController->processMouseEvent(mouseEvent, numRows, numCols);
 	}
 }
 

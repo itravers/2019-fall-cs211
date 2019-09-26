@@ -37,9 +37,15 @@ using std::to_string;
  * Purpose:      Manages ALL functions, data and communications of 
  *               the text editor.
  *******************************************************************************/
+//forward declare class
+class FileController;
+
 class TextEditor {
 
 public:
+
+	TextEditor();
+
 	/*******************************************************************************
 	 * Function Name:   load()
 	 * Purpose:         Initializes the Text Editor, loads the given/default file
@@ -62,8 +68,8 @@ private:
 
 	/* Objects */
 	FileController fileController;
-	MenuController menuController;
-	ContentController contentController;
+	//MenuController menuController;
+	//ContentController contentController;
 	DialogBox dialogBox;
 	static WINDOW* titleWindow;
 
