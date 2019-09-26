@@ -56,6 +56,8 @@ public:
 	 * Postcondition:	The program is closed.
 	 *******************************************************************************/
 	void run();
+
+	void changeStatus(string);		// Changes the status screen that gets printed at the bottom.
 private:
 
 	/* Objects */
@@ -73,7 +75,7 @@ private:
 	void drawBorder(int, int);		// Border around the screen
 	void drawStatus(int, int);		// Draws the status bar at the bottom of the screen
 	void drawScreen(int, int);		// Draws everything associated with the screen.
-	void changeStatus(string);		// Changes the status screen that gets printed at the bottom.
+	
 	void writeLines(vector<string>);// Writes the lines from the file to the screen
 	void processMainMouseEvent(MEVENT*, int, int);// processes a mouse event
 	static void colorbox(WINDOW*, chtype, int);	// Creates a color box around given window, 1 for visible

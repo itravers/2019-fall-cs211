@@ -25,13 +25,14 @@ enum READ_WRITE { READ, WRITE };
  *				 reading and loading of a file into memory. It will also
  *				 be responsible for writing memory back to the file itself.
  *******************************************************************************/
+class TextEditor; //forward declare TextEditor
 class FileController {
 public:
 
 	/*******************************************************************************
 	 * Constructor
 	 *******************************************************************************/
-	FileController();
+	FileController(TextEditor* t);
 
 	/*******************************************************************************
 	 * Public Fields
@@ -40,8 +41,8 @@ public:
 	/*******************************************************************************
 	 * Public Methods
 	 *******************************************************************************/
-	bool readFile(string fileName, vector<string>& lines, READ_WRITE readOrWrite, void(TextEditor::*changeStatus)(string));		/* Open A File & read into vector*/
-	bool writeFile(string fileName, vector<string>& lines, void(TextEditor::*changeStatus)(string));
+	bool readFile(string fileName, vector<string>& lines, READ_WRITE readOrWrite);		/* Open A File & read into vector*/
+	bool writeFile(string fileName, vector<string>& lines);
 	bool closeFile(ifstream);					/* Closes an Input File. */
 	bool closeFile(ofstream);					/* Closes an output file. */
 
@@ -51,6 +52,9 @@ private:
 	 *******************************************************************************/
 	ifstream inFile;
 	ofstream outFile;
+
+	/* Objects */
+	TextEditor* textEditor;
 
 	/*******************************************************************************
 	 * Private Methods

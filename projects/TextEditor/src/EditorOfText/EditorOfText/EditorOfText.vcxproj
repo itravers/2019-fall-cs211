@@ -131,6 +131,7 @@
     <ClInclude Include="FileController.h" />
     <ClInclude Include="panel.h" />
     <ClInclude Include="structs.h" />
+    <ClInclude Include="TextEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
@@ -145,7 +146,9 @@
     <ClCompile Include="FileController.cpp" />
     <ClCompile Include="MenuController.cpp" />
     <ClCompile Include="MenuController.h" />
+    <ClCompile Include="old_main.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TextEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="motd.txt" />

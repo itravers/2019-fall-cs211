@@ -36,10 +36,10 @@ void TextEditor::load(string fileName) {
 	curs_set(0);
 
 	//Initialize File Controller
-	FileController fileController;
+	FileController fileController(this);
 
 	//Initialize Menu Controller
-	MenuController menuController(mainWindow, numRows, numCols);
+	MenuController menuController(this, mainWindow, numRows, numCols);
 
 
 	
@@ -50,7 +50,7 @@ void TextEditor::load(string fileName) {
 
 
 	//Initialize the Content Controller
-	ContentController contentController(mainWindow, numRows, numCols);
+	ContentController contentController(this, mainWindow, numRows, numCols);
 
 	//Initialize the Dialog Box
 	DialogBox dialogBox(mainWindow, "", DIALOG_Y, DIALOG_X, DIALOG_NUM_ROWS, DIALOG_NUM_COLUMNS);
@@ -60,7 +60,7 @@ void TextEditor::load(string fileName) {
 
 	
 	vector<string>lines;
-	fileController.readFile(fileName, lines, READ, changeStatus);
+	fileController.readFile(fileName, lines, READ);
 	contentController.displayContents(lines);
 	drawScreen(numRows, numCols);
 
@@ -115,7 +115,8 @@ void TextEditor::load(string fileName) {
 			mvaddstr(0, 0, "Press ANYKEY to continue...");
 			endwin();
 
-			return 0;
+			//return 0;
+			//exit;
 			break;
 		case ctrl('s'):
 
@@ -126,7 +127,7 @@ void TextEditor::load(string fileName) {
 
 			//get file data from content controller
 			contentController.getCurrentLines(linesToSave);
-			fileController.writeFile(dialogString, linesToSave, changeStatus);
+			fileController.writeFile(dialogString, linesToSave);
 			changeStatus("Saving File As: " + dialogString);
 			break;
 		case ctrl('r'): //test saveAs

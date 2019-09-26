@@ -11,6 +11,7 @@
 #include "curses.h"
 #include "customcolors.h"
 #include "structs.h"
+#include "TextEditor.h"
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -30,14 +31,15 @@ using std::binary_search;
 				 the menu's or the status bar, or the borders, but just the
 				 files we want to display
  *******************************************************************************/
+class TextEditor; //forward declare TextEditor
 class ContentController {
 public:
 
 	/*******************************************************************************
 	 * Constructor
 	 *******************************************************************************/
-	ContentController();
-	ContentController(WINDOW* mainWindow, int numRows, int numCols);
+	ContentController(TextEditor* t);
+	ContentController(TextEditor* t, WINDOW* mainWindow, int numRows, int numCols);
 
 	/*******************************************************************************
 	 * Public Fields
@@ -49,8 +51,8 @@ public:
 	void displayContents();
 	void displayContents(vector<string> lines);
 	void displayContentsFromLine(vector<string> lines, int startLine);
-	bool isContentMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));
-	void processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string));
+	bool isContentMouseEvent(MEVENT* mouseEvent, int numRows, int numCols);
+	void processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols);
 	void moveCursorUp();
 	void moveCursorDown();
 	void moveCursorLeft();
@@ -60,6 +62,9 @@ public:
 	void getCurrentLines(vector<string>&);
 
 private:
+	/* Objects */ 
+	TextEditor* textEditor;
+
 	/*******************************************************************************
 	 * Private Fields
 	 *******************************************************************************/

@@ -8,13 +8,15 @@
 /*
 	The default constructor
 */
-ContentController::ContentController() {
+ContentController::ContentController(TextEditor* t) {
+	textEditor = t;
 	cursorLocation.x = 0;
 	cursorLocation.y = 0;
 	cursorChar = 'Q';
 }
 
-ContentController::ContentController(WINDOW* mainWindow, int numRows, int numCols) {
+ContentController::ContentController(TextEditor* t, WINDOW* mainWindow, int numRows, int numCols) {
+	textEditor = t;
 	startLine = 0;
 	wordWrapRecord = vector<int>();
 	this->numCols = numCols - 4;
@@ -197,7 +199,7 @@ bool ContentController::vectorContains(vector<int>&v, int item) {
 /*
 	Checks if this mouse event has anything to do with the content controller
 */
-bool ContentController::isContentMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string)) {
+bool ContentController::isContentMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
 	//check if the mouse is over the content pane
 	int x = mouseEvent->x;
 	int y = mouseEvent->y;
@@ -214,7 +216,7 @@ bool ContentController::isContentMouseEvent(MEVENT* mouseEvent, int numRows, int
 /*
 	Called for a mouse event on the window
 */
-void ContentController::processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols, void(*changeStatus)(string)) {
+void ContentController::processMouseEvent(MEVENT* mouseEvent, int numRows, int numCols) {
 	wrefresh(contentWindow);
 }
 
