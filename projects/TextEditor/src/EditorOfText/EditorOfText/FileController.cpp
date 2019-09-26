@@ -12,7 +12,7 @@ FileController::FileController() {
 
 }
 
-bool FileController::writeFile(string filename, vector<string>& lines, void(*changeStatus)(string)) {
+bool FileController::writeFile(string filename, vector<string>& lines, void(TextEditor::*changeStatus)(string)) {
 	if (outFile) outFile.close();
 
 	//try to open the file by name

@@ -42,10 +42,7 @@ void drawScreen(int, int);		// Draws everything associated with the screen.
 void changeStatus(string);		// Changes the status screen that gets printed at the bottom.
 void writeLines(vector<string>);// Writes the lines from the file to the screen
 void processMainMouseEvent(MEVENT*, int, int);// processes a mouse event
-void initiateSaveAs();
-static void colorbox(WINDOW*, chtype, int);
-//int mapToRange(int n, int minInput, int maxInput, int minOutput, int maxOutput);
-
+static void colorbox(WINDOW*, chtype, int);	// Creates a color box around given window, 1 for visible
 
 /* Objects */
 FileController fileController;
@@ -54,10 +51,8 @@ ContentController contentController;
 DialogBox dialogBox;
 static WINDOW* titleWindow;
 
-
 /* Variables */
 string currentStatus = "Starting Program...";
-
 
 /* Start of the Program. */
 int main(int argc, char* argv[]) {
@@ -86,9 +81,8 @@ int main(int argc, char* argv[]) {
 	nodelay(mainWindow, TRUE);
 	keypad(mainWindow, TRUE);
 	
-	//keypad(mainWindow, TRUE);
+	//i cause everything
 	curs_set(0);
-	//curs_set(2);
 
 	//Initialize File Controller
 	FileController fileController;
@@ -111,7 +105,6 @@ int main(int argc, char* argv[]) {
 	vector<string>lines;
 	fileController.readFile(fileName, lines, READ, changeStatus);
 	contentController.displayContents(lines);
-	//writeLines(lines);
 	drawScreen(numRows, numCols);
 	
 	MEVENT event;
@@ -124,19 +117,15 @@ int main(int argc, char* argv[]) {
 		
 		switch (c) {
 			case KEY_UP:
-				//changeStatus("KEY_UP");
 				contentController.moveCursorUp();
 				break;
 			case KEY_DOWN:
-				//changeStatus("KEY_DOWN");
 				contentController.moveCursorDown();
 				break;
 			case KEY_LEFT:
-				//changeStatus("KEY_LEFT");
 				contentController.moveCursorLeft();
 				break;
 			case KEY_RIGHT:
-				//changeStatus("KEY_RIGHT");
 				contentController.moveCursorRight();
 				break;
 			case ctrl('f'):
@@ -172,16 +161,20 @@ int main(int argc, char* argv[]) {
 				return 0;
 				break;
 			case ctrl('s'):
+
 				//get filename from user
 				dialogString = dialogBox.displayDialogBox("Save File As: ");
-				dialogBox.hide();
-				contentController.displayContents(); //must be called after dialogBox.hide()
+				dialogBox.hide(); //hide box
+				contentController.displayContents(); //must be called after dialogBox.hide() to delete it
 
 				//get file data from content controller
-				
 				contentController.getCurrentLines(linesToSave);
 				fileController.writeFile(dialogString, linesToSave, changeStatus);
 				changeStatus("Saving File As: " + dialogString);
+				break;
+			case ctrl('r'): //test saveAs
+
+				//saveAsClicked();
 				break;
 			case KEY_MOUSE:
 					//changeStatus("key mouse");

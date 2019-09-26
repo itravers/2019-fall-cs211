@@ -6,6 +6,7 @@
 #ifndef FILE_CONTROLLER
 #define FILE_CONTROLLER
 
+#include "TextEditor.h"
 #include <string>
 #include <vector>
 #include <fstream>
@@ -39,8 +40,8 @@ public:
 	/*******************************************************************************
 	 * Public Methods
 	 *******************************************************************************/
-	bool readFile(string fileName, vector<string>& lines, READ_WRITE readOrWrite, void(*changeStatus)(string));		/* Open A File & read into vector*/
-	bool writeFile(string fileName, vector<string>& lines, void(*changeStatus)(string));
+	bool readFile(string fileName, vector<string>& lines, READ_WRITE readOrWrite, void(TextEditor::*changeStatus)(string));		/* Open A File & read into vector*/
+	bool writeFile(string fileName, vector<string>& lines, void(TextEditor::*changeStatus)(string));
 	bool closeFile(ifstream);					/* Closes an Input File. */
 	bool closeFile(ofstream);					/* Closes an output file. */
 

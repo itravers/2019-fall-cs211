@@ -75,7 +75,6 @@ void ContentController::displayContentsFromLine(vector<string> lines, int startL
 			wattroff(wrapBar, COLOR_PAIR(COLOR_WORDWRAP_PAIR));
 		}
 
-
 		//check if this line should be a scroll bar line
 		if (isScrollbarLine(startLine + i, firstLine + n, 0, lines.size()+numRows)) {
 			wattron(scrollBar, COLOR_PAIR(COLOR_SCROLLBAR_PAIR));
@@ -131,12 +130,14 @@ void ContentController::insertChar(char c) {
 
 	//edit the character at the current cursor location (+ startLine adjusts the correct line when scrolling)
 	string line = currentLines[ yAdjusted];
-	
+
+	//replace the character in the string
 	replaceCharInString(line, x-2, c);
 
-	
-	
+	//replace the line with the edited line
 	currentLines[yAdjusted] = line;
+
+	//refresh the content window
 	wrefresh(contentWindow);
 }
 
